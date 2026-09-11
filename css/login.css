@@ -138,7 +138,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 110px 60px 70px;
+    padding: 50px 40px;
     background: var(--white);
 }
 
@@ -186,14 +186,29 @@
     max-width: 440px;
 }
 
+.auth-brand-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 32px;
+    width: 100%;
+}
+
+.auth-brand-form img {
+    width: 180px;
+    height: 36px;
+    object-fit: contain;
+    filter: brightness(0) saturate(100%) invert(14%) sepia(12%) saturate(993%) hue-rotate(178deg) brightness(98%) contrast(91%);
+}
+
 .auth-form-head {
-    margin-bottom: 42px;
+    margin-bottom: 20px;
 }
 
 .auth-form-title {
-    margin: 0 0 14px;
+    margin: 0 0 6px;
     font-family: Georgia, "Times New Roman", serif;
-    font-size: clamp(38px, 3.6vw, 52px);
+    font-size: clamp(28px, 3vw, 40px);
     font-weight: 400;
     line-height: 1;
     letter-spacing: -.05em;
@@ -208,20 +223,20 @@
     max-width: 400px;
     margin: 0;
     color: rgba(34, 40, 49, .62);
-    font-size: 14px;
-    line-height: 1.8;
+    font-size: 13px;
+    line-height: 1.6;
 }
 
 /* ---------- Form fields ---------- */
 
 .auth-form {
     display: grid;
-    gap: 24px;
+    gap: 16px;
 }
 
 .auth-field {
     display: grid;
-    gap: 10px;
+    gap: 8px;
 }
 
 .auth-label-row {
@@ -248,13 +263,13 @@
 
 .auth-input {
     width: 100%;
-    padding: 13px 0;
+    padding: 10px 0;
     border: 0;
     border-bottom: 1px solid var(--border-light);
     background: transparent;
     color: var(--charcoal);
     font-family: inherit;
-    font-size: 15px;
+    font-size: 14px;
     letter-spacing: .01em;
     line-height: 1.4;
     outline: none;
@@ -356,13 +371,13 @@ input[type="password"]::-webkit-contacts-auto-fill-button {
     align-items: center;
     gap: 20px;
     width: 100%;
-    padding: 13px 0;
+    padding: 10px 0;
     border: 0;
     border-bottom: 1px solid var(--border-light);
     background: transparent;
     color: var(--charcoal);
     font-family: inherit;
-    font-size: 15px;
+    font-size: 14px;
     letter-spacing: .01em;
     text-align: left;
     cursor: pointer;
@@ -475,8 +490,8 @@ input[type="password"]::-webkit-contacts-auto-fill-button {
     justify-content: center;
     gap: 12px;
     width: 100%;
-    min-height: 52px;
-    margin-top: 6px;
+    min-height: 48px;
+    margin-top: 0;
     padding: 0 28px;
     border: 1px solid var(--charcoal);
     background: var(--charcoal);
@@ -523,6 +538,7 @@ input[type="password"]::-webkit-contacts-auto-fill-button {
     font-weight: 700;
     letter-spacing: .2em;
     text-transform: uppercase;
+    padding-top: 20px;
 }
 
 .auth-divider::before,
@@ -544,7 +560,7 @@ input[type="password"]::-webkit-contacts-auto-fill-button {
     align-items: center;
     justify-content: center;
     gap: 10px;
-    min-height: 48px;
+    min-height: 44px;
     padding: 0 16px;
     border: 1px solid var(--border-light);
     background: transparent;

@@ -171,11 +171,16 @@
             .notfound-inner {
                 grid-template-columns: 1fr;
                 gap: 34px;
-                align-items: start;
+                justify-items: center;
+                text-align: center;
             }
 
             .notfound-code {
                 font-size: clamp(96px, 26vw, 170px);
+            }
+
+            .notfound-actions {
+                justify-content: center;
             }
         }
 
@@ -246,43 +251,6 @@
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-            /* ---------- Shared mobile menu ---------- */
-            const menuToggle = document.querySelector(".menu-toggle");
-            const mobileMenu = document.querySelector(".mobile-menu");
-            const mobileLinks = document.querySelectorAll(".mobile-nav a");
-            let menuOpen = false;
-
-            function setMenu(open) {
-                menuOpen = open;
-                menuToggle.setAttribute("aria-expanded", String(open));
-                menuToggle.setAttribute("aria-label", open ? "Close navigation" : "Open navigation");
-                mobileMenu.setAttribute("aria-hidden", String(!open));
-                document.body.classList.toggle("menu-open", open);
-
-                if (reducedMotion) {
-                    mobileMenu.style.visibility = open ? "visible" : "hidden";
-                    mobileMenu.style.opacity = open ? "1" : "0";
-                    return;
-                }
-
-                if (open) {
-                    gsap.set(mobileMenu, { visibility: "visible" });
-                    gsap.to(mobileMenu, { opacity: 1, duration: .45, ease: "power3.out" });
-                    gsap.fromTo(".mobile-nav a",
-                        { y: 28, opacity: 0 },
-                        { y: 0, opacity: 1, duration: .55, stagger: .06, delay: .08, ease: "power3.out" }
-                    );
-                } else {
-                    gsap.to(mobileMenu, {
-                        opacity: 0, duration: .3, ease: "power2.in",
-                        onComplete: () => gsap.set(mobileMenu, { visibility: "hidden" })
-                    });
-                }
-            }
-
-            menuToggle.addEventListener("click", () => setMenu(!menuOpen));
-            mobileLinks.forEach(link => link.addEventListener("click", () => setMenu(false)));
 
             /* ---------- Entrance ---------- */
             if (!reducedMotion && window.gsap) {
