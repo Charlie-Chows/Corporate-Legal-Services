@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sign in to the STACKLY Legal client portal.">
+    <title>Sign In — STACKLY Legal</title>
+
+    <link rel="stylesheet" href="../global.css">
+    <link rel="stylesheet" href="../css/login.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
+</head>
+
+<body class="auth-page">
+    <!-- =====================================================
+         VISUAL PANEL
+         ===================================================== -->
+    <section class="auth-visual" aria-hidden="false">
+        <div class="auth-visual-image">
+            <img src="../assets/image_9b24c0e8.webp"
+                alt="Classical courthouse architecture with columns">
+        </div>
+
+        <div class="auth-visual-content">
+            <a class="auth-brand" href="../index.html" aria-label="STACKLY Legal home">
+                <img src="../logo.webp" alt="STACKLY Legal logo">
+            </a>
+
+            <div class="auth-visual-statement">
+                <div class="auth-visual-eyebrow">Client Portal / Secure Access</div>
+                <h2 class="auth-visual-title">Counsel, <em>on record.</em></h2>
+                <p class="auth-visual-copy">
+                    Access your matters, documents and correspondence through a
+                    single private portal.
+                </p>
+            </div>
+
+            <div class="auth-visual-meta">
+                <span>Est. 2004</span>
+                <span>Client confidential</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- =====================================================
+         FORM SIDE
+         ===================================================== -->
+    <section class="auth-form-side">
+        <a class="auth-back" href="../index.html">Back to home</a>
+
+        <div class="auth-form-wrap">
+            <div class="auth-form-head">
+                <div class="eyebrow">Sign In</div>
+                <h1 class="auth-form-title">Welcome <em>back.</em></h1>
+                <p class="auth-form-sub">Sign in to access your STACKLY client portal.</p>
+            </div>
+
+            <form class="auth-form" id="loginForm" novalidate autocomplete="off">
+                <!-- Email -->
+                <div class="auth-field">
+                    <label class="auth-label" for="email">
+                        Email <span class="req" aria-hidden="true">*</span>
+                    </label>
+                    <input class="auth-input" id="email" name="email" type="email" inputmode="email" autocomplete="off"
+                        spellcheck="false" required aria-describedby="email-error"
+                        data-error-required="Please enter your email address."
+                        data-error-invalid="Please enter a valid email address.">
+                    <span class="field-error" id="email-error" role="alert" aria-live="polite"></span>
+                </div>
+
+                <!-- Password -->
+                <div class="auth-field">
+                    <div class="auth-label-row">
+                        <label class="auth-label" for="password">
+                            Password <span class="req" aria-hidden="true">*</span>
+                        </label>
+                        <a class="auth-forgot" href="../404.html">Forgot?</a>
+                    </div>
+                    <div class="field-with-action">
+                        <input class="auth-input" id="password" name="password" type="password"
+                            autocomplete="new-password" required aria-describedby="password-error"
+                            data-error-required="Please enter your password.">
+                        <button class="reveal-btn" type="button" aria-label="Show password" aria-pressed="false"
+                            data-reveal>
+                            <svg class="icon-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" />
+                                <circle cx="12" cy="12" r="3" />
+                            </svg>
+                            <svg class="icon-eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" />
+                                <circle cx="12" cy="12" r="3" />
+                                <line x1="3" y1="21" x2="21" y2="3" />
+                            </svg>
+                        </button>
+                    </div>
+                    <span class="field-error" id="password-error" role="alert" aria-live="polite"></span>
+                </div>
+
+                <!-- Role (custom dropdown) -->
+                <div class="role-field" id="roleField" data-role-select>
+                    <label class="auth-label" id="role-label">
+                        Role <span class="req" aria-hidden="true">*</span>
+                    </label>
+
+                    <button class="role-trigger" type="button" id="roleTrigger" aria-haspopup="listbox"
+                        aria-expanded="false" aria-labelledby="role-label" aria-describedby="role-error">
+                        <span class="role-trigger-value" id="roleTriggerValue">Select a role</span>
+                        <span class="role-trigger-arrow" aria-hidden="true"></span>
+                    </button>
+
+                    <ul class="role-menu" id="roleMenu" role="listbox" aria-labelledby="role-label">
+                        <li class="role-option" role="option" tabindex="-1" data-value="user" aria-selected="false">User
+                        </li>
+                        <li class="role-option" role="option" tabindex="-1" data-value="admin" aria-selected="false">
+                            Admin</li>
+                    </ul>
+
+                    <input type="hidden" name="role" id="role" value="">
+                    <span class="field-error" id="role-error" role="alert" aria-live="polite"></span>
+                </div>
+
+                <!-- Submit -->
+                <button class="auth-submit" type="submit">Sign In</button>
+
+                <!-- Divider -->
+                <div class="auth-divider">Or continue with</div>
+
+                <!-- Social logins -->
+                <div class="auth-socials">
+                    <button class="social-btn" type="button" data-social="google">
+                        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                            <path
+                                d="M21.35 11.1H12v2.9h5.35c-.5 2.4-2.5 4.1-5.35 4.1-3.1 0-5.6-2.5-5.6-5.6s2.5-5.6 5.6-5.6c1.4 0 2.65.5 3.6 1.3l2.15-2.15C16.35 4.6 14.3 3.8 12 3.8c-4.5 0-8.2 3.7-8.2 8.2s3.7 8.2 8.2 8.2c4.75 0 7.9-3.35 7.9-8.05 0-.55-.05-1.05-.15-1.5z" />
+                        </svg>
+                        Google
+                    </button>
+                    <button class="social-btn" type="button" data-social="linkedin">
+                        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                            <path
+                                d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.13 1.44-2.13 2.94v5.67H9.37V9h3.42v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43c-1.14 0-2.07-.93-2.07-2.07 0-1.14.93-2.07 2.07-2.07 1.14 0 2.07.93 2.07 2.07 0 1.14-.93 2.07-2.07 2.07zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.55C0 23.22.79 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.73V1.72C24 .77 23.2 0 22.22 0z" />
+                        </svg>
+                        LinkedIn
+                    </button>
+                </div>
+
+                <!-- Footer link -->
+                <p class="auth-footer">
+                    New to STACKLY?
+                    <a href="signup.html">Create account</a>
+                </p>
+            </form>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+            /* =====================================================
+               Entrance animation
+               ===================================================== */
+            if (!reducedMotion && window.gsap) {
+                gsap.timeline({ defaults: { ease: "power3.out" } })
+                    .from(".auth-visual-image", { clipPath: "inset(100% 0 0 0)", duration: 1.2 })
+                    .from(".auth-brand", { y: -16, opacity: 0, duration: .6 }, "-=.7")
+                    .from(".auth-visual-statement > *", { y: 26, opacity: 0, duration: .7, stagger: .1 }, "-=.55")
+                    .from(".auth-visual-meta", { y: 16, opacity: 0, duration: .6 }, "-=.5")
+                    .from(".auth-back", { y: -14, opacity: 0, duration: .55 }, "-=.9")
+                    .from(".auth-form-head > *", { y: 22, opacity: 0, duration: .6, stagger: .08 }, "-=.7")
+                    .from(".auth-form > *", { y: 20, opacity: 0, duration: .55, stagger: .06 }, "-=.5");
+            }
+
+            /* =====================================================
+               Password reveal
+               ===================================================== */
+            document.querySelectorAll("[data-reveal]").forEach((btn) => {
+                btn.addEventListener("click", () => {
+                    const input = btn.closest(".field-with-action").querySelector("input");
+                    const revealed = btn.classList.toggle("revealed");
+                    input.type = revealed ? "text" : "password";
+                    btn.setAttribute("aria-label", revealed ? "Hide password" : "Show password");
+                    btn.setAttribute("aria-pressed", String(revealed));
+                });
+            });
+
+            /* =====================================================
+               Custom role dropdown
+               ===================================================== */
+            const roleField = document.getElementById("roleField");
+            const roleTrigger = document.getElementById("roleTrigger");
+            const roleMenu = document.getElementById("roleMenu");
+            const roleTriggerValue = document.getElementById("roleTriggerValue");
+            const roleInput = document.getElementById("role");
+            const roleOptions = roleMenu ? Array.from(roleMenu.querySelectorAll(".role-option")) : [];
+            let focusedIndex = -1;
+
+            function openMenu() {
+                roleMenu.classList.add("open");
+                roleTrigger.setAttribute("aria-expanded", "true");
+                const selected = roleOptions.findIndex(o => o.classList.contains("selected"));
+                focusedIndex = selected >= 0 ? selected : 0;
+                focusOption(focusedIndex);
+            }
+
+            function closeMenu() {
+                roleMenu.classList.remove("open");
+                roleTrigger.setAttribute("aria-expanded", "false");
+                roleOptions.forEach(o => o.classList.remove("focused"));
+                focusedIndex = -1;
+            }
+
+            function focusOption(index) {
+                roleOptions.forEach(o => o.classList.remove("focused"));
+                const opt = roleOptions[index];
+                if (opt) {
+                    opt.classList.add("focused");
+                    opt.focus({ preventScroll: true });
+                }
+            }
+
+            function selectOption(opt) {
+                const value = opt.dataset.value;
+                const label = opt.textContent.trim();
+
+                roleInput.value = value;
+                roleTriggerValue.textContent = label;
+                roleTrigger.classList.add("has-value");
+
+                roleOptions.forEach(o => {
+                    o.classList.remove("selected");
+                    o.setAttribute("aria-selected", "false");
+                });
+                opt.classList.add("selected");
+                opt.setAttribute("aria-selected", "true");
+
+                clearRoleError();
+                closeMenu();
+            }
+
+            function clearRoleError() {
+                const err = document.getElementById("role-error");
+                if (err) {
+                    err.textContent = "";
+                    err.classList.remove("visible");
+                }
+                roleField.removeAttribute("data-invalid");
+            }
+
+            if (roleTrigger && roleMenu) {
+                roleTrigger.addEventListener("click", () => {
+                    const isOpen = roleMenu.classList.contains("open");
+                    if (isOpen) closeMenu();
+                    else openMenu();
+                });
+
+                roleOptions.forEach((opt, i) => {
+                    opt.addEventListener("click", () => selectOption(opt));
+                    opt.addEventListener("mouseenter", () => {
+                        roleOptions.forEach(o => o.classList.remove("focused"));
+                        opt.classList.add("focused");
+                        focusedIndex = i;
+                    });
+                });
+
+                roleTrigger.addEventListener("keydown", (e) => {
+                    if (e.key === "ArrowDown" || e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        openMenu();
+                    }
+                });
+
+                roleMenu.addEventListener("keydown", (e) => {
+                    if (e.key === "Escape") {
+                        e.preventDefault();
+                        closeMenu();
+                        roleTrigger.focus();
+                    } else if (e.key === "ArrowDown") {
+                        e.preventDefault();
+                        focusedIndex = Math.min(focusedIndex + 1, roleOptions.length - 1);
+                        focusOption(focusedIndex);
+                    } else if (e.key === "ArrowUp") {
+                        e.preventDefault();
+                        focusedIndex = Math.max(focusedIndex - 1, 0);
+                        focusOption(focusedIndex);
+                    } else if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        if (roleOptions[focusedIndex]) selectOption(roleOptions[focusedIndex]);
+                        roleTrigger.focus();
+                    } else if (e.key === "Tab") {
+                        closeMenu();
+                    }
+                });
+
+                document.addEventListener("click", (e) => {
+                    if (!roleField.contains(e.target)) closeMenu();
+                });
+            }
+
+            /* =====================================================
+               Form validation + submission
+               ===================================================== */
+            const form = document.getElementById("loginForm");
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            function showError(fieldName, message) {
+                const err = document.getElementById(fieldName + "-error");
+                if (err) {
+                    err.textContent = message;
+                    err.classList.add("visible");
+                }
+                const field = form.elements[fieldName];
+                if (field) field.setAttribute("aria-invalid", "true");
+            }
+
+            function clearError(fieldName) {
+                const err = document.getElementById(fieldName + "-error");
+                if (err) {
+                    err.textContent = "";
+                    err.classList.remove("visible");
+                }
+                const field = form.elements[fieldName];
+                if (field) field.removeAttribute("aria-invalid");
+            }
+
+            function validate() {
+                let valid = true;
+                let firstInvalid = null;
+
+                /* Email */
+                const email = form.elements.email.value.trim();
+                if (!email) {
+                    showError("email", "Please enter your email address.");
+                    valid = false;
+                    if (!firstInvalid) firstInvalid = form.elements.email;
+                } else if (!emailRegex.test(email)) {
+                    showError("email", "Please enter a valid email address.");
+                    valid = false;
+                    if (!firstInvalid) firstInvalid = form.elements.email;
+                } else {
+                    clearError("email");
+                }
+
+                /* Password */
+                const password = form.elements.password.value;
+                if (!password) {
+                    showError("password", "Please enter your password.");
+                    valid = false;
+                    if (!firstInvalid) firstInvalid = form.elements.password;
+                } else {
+                    clearError("password");
+                }
+
+                /* Role */
+                const role = roleInput.value;
+                if (!role) {
+                    const err = document.getElementById("role-error");
+                    if (err) {
+                        err.textContent = "Please select a role.";
+                        err.classList.add("visible");
+                    }
+                    roleField.setAttribute("data-invalid", "true");
+                    valid = false;
+                    if (!firstInvalid) firstInvalid = roleTrigger;
+                } else {
+                    clearRoleError();
+                }
+
+                return { valid, firstInvalid, email, role };
+            }
+
+            /* Live clearing of errors as the user types */
+            ["email", "password"].forEach((name) => {
+                const field = form.elements[name];
+                field.addEventListener("input", () => {
+                    if (field.getAttribute("aria-invalid") === "true") {
+                        /* Re-validate just this field */
+                        if (name === "email") {
+                            const v = field.value.trim();
+                            if (!v) clearError("email");
+                            else if (emailRegex.test(v)) clearError("email");
+                        } else {
+                            if (field.value) clearError("password");
+                        }
+                    }
+                });
+            });
+
+            form.addEventListener("submit", (e) => {
+                e.preventDefault();
+
+                const result = validate();
+                if (!result.valid) {
+                    if (result.firstInvalid) result.firstInvalid.focus();
+                    return;
+                }
+
+                /* Store for the dashboard greeting */
+                try {
+                    localStorage.setItem("userEmail", result.email);
+                    localStorage.setItem("userRole", result.role);
+                } catch (err) { /* storage unavailable — ignore */ }
+
+                /* Clear values before redirect so browser back has a clean form */
+                form.reset();
+                ["email", "password"].forEach(clearError);
+                clearRoleError();
+                roleInput.value = "";
+                roleTriggerValue.textContent = "Select a role";
+                roleTrigger.classList.remove("has-value");
+                roleOptions.forEach(o => {
+                    o.classList.remove("selected");
+                    o.setAttribute("aria-selected", "false");
+                });
+
+                /* Redirect based on role */
+                window.location.href = result.role === "admin" ? "admin.html" : "user.html";
+            });
+
+            /* Redirect social buttons and clear login values before leaving */
+            document.querySelectorAll("[data-social]").forEach((btn) => {
+                btn.addEventListener("click", () => {
+                    window.location.href = "../404.html";
+                });
+            });
+
+            /* If the user lands back on this page via the browser back button,
+               force-clear any restored form state. */
+            window.addEventListener("pageshow", (event) => {
+                if (event.persisted || (performance.getEntriesByType && performance.getEntriesByType("navigation")[0] && performance.getEntriesByType("navigation")[0].type === "back_forward")) {
+                    form.reset();
+                    ["email", "password"].forEach(clearError);
+                    clearRoleError();
+                    roleInput.value = "";
+                    roleTriggerValue.textContent = "Select a role";
+                    roleTrigger.classList.remove("has-value");
+                    roleOptions.forEach(o => {
+                        o.classList.remove("selected");
+                        o.setAttribute("aria-selected", "false");
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

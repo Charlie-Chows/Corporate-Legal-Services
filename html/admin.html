@@ -1,0 +1,3149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="STACKLY Legal — administrative console for firm-wide matters, counsel and financial oversight.">
+    <title>Admin Console — Stackly Legal</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
+
+    <style>
+        /* =========================================================
+           STACKLY LEGAL — ADMIN CONSOLE
+           Palette: #222831 / #393E46 / #948979 / #DFD0B8
+           ========================================================= */
+
+        :root {
+            --charcoal: #222831;
+            --slate: #393E46;
+            --taupe: #948979;
+            --ivory: #DFD0B8;
+            --white: #f8f7f3;
+            --paper: #ffffff;
+
+            --ink: #222831;
+            --muted: rgba(34, 40, 49, .58);
+            --muted-soft: rgba(34, 40, 49, .42);
+            --line: rgba(34, 40, 49, .12);
+            --line-soft: rgba(34, 40, 49, .07);
+            --line-dark: rgba(223, 208, 184, .16);
+
+            --sidebar-w: 276px;
+            --topbar-h: 74px;
+            --ease: cubic-bezier(.22, .61, .36, 1);
+            --ok: #4f7a5b;
+            --warn: #a8863f;
+            --risk: #a04a3f;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        html {
+            background: var(--charcoal);
+            overflow-x: hidden;
+        }
+
+        body {
+            margin: 0;
+            background: var(--white);
+            color: var(--charcoal);
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body.nav-open {
+            overflow: hidden;
+        }
+
+        img {
+            display: block;
+            max-width: 100%;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button {
+            font: inherit;
+            border: 0;
+            background: none;
+            cursor: pointer;
+            color: inherit;
+        }
+
+        ::selection {
+            background: var(--ivory);
+            color: var(--charcoal);
+        }
+
+        :focus-visible {
+            outline: 2px solid var(--taupe);
+            outline-offset: 2px;
+        }
+
+        /* =========================================================
+           SIDEBAR
+           ========================================================= */
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            z-index: 300;
+            width: var(--sidebar-w);
+            display: flex;
+            flex-direction: column;
+            background: var(--charcoal);
+            color: var(--white);
+            border-right: 1px solid var(--line-dark);
+            transition: transform .5s var(--ease);
+        }
+
+        .sb-head {
+            padding: 28px 26px 26px;
+            border-bottom: 1px solid var(--line-dark);
+        }
+
+        .sb-brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 13px;
+            color: var(--ivory);
+            transition: opacity .3s ease;
+        }
+
+        .sb-brand:hover {
+            opacity: .82;
+        }
+
+        .sb-brand img {
+            width: 150px;
+            height: 38px;
+            object-fit: contain;
+            filter: brightness(0) saturate(100%) invert(87%) sepia(9%) saturate(401%) hue-rotate(357deg) brightness(95%) contrast(89%);
+        }
+
+        .sb-brand-name {
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 18px;
+            letter-spacing: -.02em;
+            line-height: 1.1;
+        }
+
+        .role-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 16px;
+            padding: 6px 12px;
+            border: 1px solid rgba(223, 208, 184, .34);
+            color: var(--ivory);
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: .24em;
+            text-transform: uppercase;
+        }
+
+        .role-chip::before {
+            content: "";
+            width: 6px;
+            height: 6px;
+            background: var(--ivory);
+            border-radius: 50%;
+            animation: pulseDot 2.4s ease-in-out infinite;
+        }
+
+        @keyframes pulseDot {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: .35;
+                transform: scale(.7);
+            }
+        }
+
+        .sb-nav {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 0;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(223, 208, 184, .24) transparent;
+        }
+
+        .sb-nav::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .sb-nav::-webkit-scrollbar-thumb {
+            background: rgba(223, 208, 184, .24);
+        }
+
+        .sb-nav-label {
+            padding: 0 26px 12px;
+            color: rgba(248, 247, 243, .34);
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: .22em;
+            text-transform: uppercase;
+        }
+
+        .sb-item {
+            position: relative;
+            display: grid;
+            grid-template-columns: 1fr 8px;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            padding: 15px 26px;
+            text-align: left;
+            color: rgba(248, 247, 243, .62);
+            border-left: 2px solid transparent;
+            transition: color .3s ease, background .3s ease, border-color .3s ease, padding .35s var(--ease);
+        }
+
+        .sb-item:hover {
+            color: var(--ivory);
+            background: rgba(223, 208, 184, .045);
+            padding-left: 30px;
+        }
+
+        .sb-item.is-active {
+            color: var(--ivory);
+            background: rgba(223, 208, 184, .07);
+            border-left-color: var(--ivory);
+        }
+
+        .sb-index {
+            color: var(--taupe);
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: .14em;
+        }
+
+        .sb-item.is-active .sb-index {
+            color: var(--ivory);
+        }
+
+        .sb-label {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+        }
+
+        .sb-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: transparent;
+            transition: background .3s ease;
+        }
+
+        .sb-item.is-active .sb-dot {
+            background: var(--ivory);
+        }
+
+        .sb-foot {
+            padding: 20px 26px 24px;
+            border-top: 1px solid var(--line-dark);
+        }
+
+        .sb-user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .sb-avatar {
+            flex-shrink: 0;
+            width: 36px;
+            height: 36px;
+            display: grid;
+            place-items: center;
+            border: 1px solid rgba(223, 208, 184, .3);
+            color: var(--ivory);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .08em;
+        }
+
+        .sb-user-meta {
+            display: grid;
+            min-width: 0;
+        }
+
+        .sb-user-meta strong {
+            color: var(--white);
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: .02em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .sb-user-meta em {
+            color: var(--taupe);
+            font-size: 9px;
+            font-style: normal;
+            font-weight: 700;
+            letter-spacing: .16em;
+            text-transform: uppercase;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .sb-logout {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            width: 100%;
+            padding: 13px 16px;
+            border: 1px solid rgba(223, 208, 184, .28);
+            color: var(--ivory);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: .18em;
+            text-transform: uppercase;
+            transition: background .35s var(--ease), color .35s var(--ease), border-color .35s var(--ease);
+        }
+
+        .sb-logout:hover {
+            background: var(--ivory);
+            color: var(--charcoal);
+            border-color: var(--ivory);
+        }
+
+        .sb-logout span:last-child {
+            transition: transform .35s var(--ease);
+        }
+
+        .sb-logout:hover span:last-child {
+            transform: translateX(4px);
+        }
+
+        .scrim {
+            position: fixed;
+            inset: 0;
+            z-index: 290;
+            background: rgba(23, 26, 30, .55);
+            backdrop-filter: blur(2px);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity .4s ease, visibility .4s;
+        }
+
+        .scrim.is-visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* =========================================================
+           MAIN COLUMN
+           ========================================================= */
+
+        .admin-main {
+            margin-left: var(--sidebar-w);
+            padding-top: var(--topbar-h);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .topbar {
+            position: fixed;
+            top: 0;
+            left: var(--sidebar-w);
+            right: 0;
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            height: var(--topbar-h);
+            padding: 0 32px;
+            background: rgba(248, 247, 243, .92);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--line);
+        }
+
+        .burger {
+            display: none;
+            position: relative;
+            width: 40px;
+            height: 40px;
+            flex-shrink: 0;
+            border: 1px solid var(--line);
+        }
+
+        .burger span {
+            position: absolute;
+            left: 11px;
+            width: 18px;
+            height: 1px;
+            background: var(--charcoal);
+            transition: transform .35s var(--ease), top .35s var(--ease);
+        }
+
+        .burger span:first-child {
+            top: 16px;
+        }
+
+        .burger span:last-child {
+            top: 23px;
+        }
+
+        .burger[aria-expanded="true"] span:first-child {
+            top: 19.5px;
+            transform: rotate(45deg);
+        }
+
+        .burger[aria-expanded="true"] span:last-child {
+            top: 19.5px;
+            transform: rotate(-45deg);
+        }
+
+        .topbar-logo {
+            display: none;
+            flex-shrink: 0;
+        }
+
+        .topbar-logo img {
+            width: 100px;
+            height: 34px;
+            object-fit: contain;
+            filter: brightness(0) saturate(100%) invert(13%) sepia(9%) saturate(1000%) hue-rotate(180deg) brightness(95%) contrast(92%);
+        }
+
+        /* Greeting — primary left content on desktop */
+        .topbar-greeting-wrap {
+            display: flex;
+            align-items: center;
+            min-width: 0;
+        }
+
+        .topbar-greeting {
+            color: var(--charcoal);
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 22px;
+            font-weight: 400;
+            letter-spacing: -.02em;
+            line-height: 1.1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .topbar-right {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            color: var(--muted);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: .16em;
+            text-transform: uppercase;
+            flex-shrink: 0;
+        }
+
+        .live-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--ok);
+            box-shadow: 0 0 0 0 rgba(79, 122, 91, .5);
+            animation: livePulse 2.6s ease-out infinite;
+        }
+
+        @keyframes livePulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(79, 122, 91, .45);
+            }
+
+            70% {
+                box-shadow: 0 0 0 8px rgba(79, 122, 91, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(79, 122, 91, 0);
+            }
+        }
+
+        .topbar-date {
+            padding-left: 14px;
+            border-left: 1px solid var(--line);
+            color: var(--muted-soft);
+        }
+
+        /* =========================================================
+           PANELS
+           ========================================================= */
+
+        .panels {
+            flex: 1;
+        }
+
+        .panels,
+        .panel,
+        .card,
+        .grid,
+        .chart,
+        .bars,
+        .hbar,
+        .donut-wrap,
+        .rings,
+        .table-scroll {
+            max-width: 100%;
+            min-width: 0;
+        }
+
+        .panel {
+            display: none;
+            padding: 36px 32px 90px;
+        }
+
+        .panel.is-active {
+            display: block;
+        }
+
+        .panel-head {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 40px;
+            align-items: end;
+            padding-bottom: 26px;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .panel-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
+            color: var(--taupe);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: .22em;
+            text-transform: uppercase;
+        }
+
+        .panel-eyebrow::before {
+            content: "";
+            width: 26px;
+            height: 1px;
+            background: currentColor;
+        }
+
+        .panel-title {
+            margin: 0;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: clamp(30px, 3.4vw, 46px);
+            font-weight: 400;
+            line-height: 1;
+            letter-spacing: -.045em;
+        }
+
+        .panel-lede {
+            max-width: 420px;
+            margin: 0;
+            justify-self: end;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        /* =========================================================
+           GRIDS
+           ========================================================= */
+
+        .grid {
+            display: grid;
+            gap: 18px;
+            margin-bottom: 18px;
+        }
+
+        .g-4 {
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        .g-3 {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .g-2 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .g-21 {
+            grid-template-columns: 1.65fr 1fr;
+        }
+
+        .g-12 {
+            grid-template-columns: 1fr 1.65fr;
+        }
+
+        /* =========================================================
+           CARDS
+           ========================================================= */
+
+        .card {
+            position: relative;
+            padding: 24px;
+            background: var(--paper);
+            border: 1px solid var(--line);
+            transition: border-color .4s var(--ease), transform .4s var(--ease);
+        }
+
+        .card:hover {
+            border-color: rgba(34, 40, 49, .26);
+            transform: translateY(-2px);
+        }
+
+        .card-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 18px;
+            margin-bottom: 22px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--line-soft);
+        }
+
+        .card-head h3 {
+            margin: 0;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 18px;
+            font-weight: 400;
+            letter-spacing: -.02em;
+            line-height: 1.2;
+        }
+
+        .card-meta {
+            color: var(--taupe);
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: .18em;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        /* =========================================================
+           KPI CARDS
+           ========================================================= */
+
+        .kpi {
+            position: relative;
+            display: grid;
+            gap: 10px;
+            padding: 24px;
+            background: var(--paper);
+            border: 1px solid var(--line);
+            overflow: hidden;
+            transition: border-color .4s var(--ease), transform .4s var(--ease);
+        }
+
+        .kpi:hover {
+            border-color: rgba(34, 40, 49, .26);
+            transform: translateY(-3px);
+        }
+
+        .kpi::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--taupe);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform .6s var(--ease);
+        }
+
+        .kpi:hover::after {
+            transform: scaleX(1);
+        }
+
+        .kpi-label {
+            color: var(--muted-soft);
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+        }
+
+        .kpi-value {
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: clamp(34px, 3.4vw, 46px);
+            font-weight: 400;
+            line-height: 1;
+            letter-spacing: -.04em;
+        }
+
+        .kpi-value sup {
+            font-size: .42em;
+            color: var(--taupe);
+            top: -.7em;
+            margin-left: 3px;
+        }
+
+        .kpi-foot {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--line-soft);
+        }
+
+        .kpi-trend {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+        }
+
+        .kpi-trend.up {
+            color: var(--ok);
+        }
+
+        .kpi-trend.down {
+            color: var(--risk);
+        }
+
+        .kpi-trend.flat {
+            color: var(--warn);
+        }
+
+        .kpi-note {
+            color: var(--muted-soft);
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+        }
+
+        /* =========================================================
+           CHARTS
+           ========================================================= */
+
+        .chart {
+            display: grid;
+            grid-template-columns: 46px 1fr;
+            column-gap: 14px;
+        }
+
+        .chart-y {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            text-align: right;
+            color: var(--muted-soft);
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: .08em;
+            line-height: 1;
+        }
+
+        .chart-y span {
+            line-height: 1;
+            transform: translateY(-50%);
+        }
+
+        .chart-y span:first-child {
+            transform: translateY(0);
+        }
+
+        .chart-y span:last-child {
+            transform: translateY(-100%);
+        }
+
+        .chart-body {
+            min-width: 0;
+        }
+
+        .chart-plot {
+            position: relative;
+            width: 100%;
+        }
+
+        .chart-svg {
+            display: block;
+            width: 100%;
+            max-width: 100%;
+            overflow: hidden;
+        }
+
+        .chart-svg .grid-line {
+            stroke: rgba(34, 40, 49, .09);
+            stroke-width: 1;
+            vector-effect: non-scaling-stroke;
+        }
+
+        .chart-svg .chart-line {
+            fill: none;
+            stroke-width: 2;
+            stroke-linejoin: round;
+            stroke-linecap: round;
+            vector-effect: non-scaling-stroke;
+        }
+
+        .chart-x {
+            display: flex;
+            justify-content: space-between;
+            gap: 4px;
+            margin-top: 12px;
+            color: var(--muted-soft);
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+        }
+
+        .chart-x span {
+            flex: 1;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .chart-x span:first-child {
+            text-align: left;
+        }
+
+        .chart-x span:last-child {
+            text-align: right;
+        }
+
+        /* ---------- Bar chart ---------- */
+
+        .bars {
+            display: flex;
+            align-items: flex-end;
+            gap: 10px;
+            height: 210px;
+        }
+
+        .bar-col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            min-width: 0;
+        }
+
+        .bar-track {
+            flex: 1;
+            display: flex;
+            align-items: flex-end;
+            position: relative;
+        }
+
+        .bar {
+            display: block;
+            width: 100%;
+            background: var(--charcoal);
+            transform-origin: bottom center;
+            transition: background .3s ease;
+        }
+
+        .bar-col:hover .bar {
+            background: var(--taupe);
+        }
+
+        .bar-col.is-accent .bar {
+            background: var(--taupe);
+        }
+
+        .bar-lbl {
+            display: block;
+            margin-top: 10px;
+            color: var(--muted-soft);
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* ---------- Donut ---------- */
+
+        .donut-wrap {
+            display: grid;
+            grid-template-columns: 180px 1fr;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .donut-svg {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .donut-center {
+            position: relative;
+        }
+
+        .donut-center-text {
+            position: absolute;
+            inset: 0;
+            display: grid;
+            place-content: center;
+            text-align: center;
+            pointer-events: none;
+        }
+
+        .donut-center-text strong {
+            display: block;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 30px;
+            font-weight: 400;
+            line-height: 1;
+            letter-spacing: -.03em;
+        }
+
+        .donut-center-text span {
+            display: block;
+            margin-top: 4px;
+            color: var(--muted-soft);
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: .18em;
+            text-transform: uppercase;
+        }
+
+        .legend {
+            display: grid;
+            gap: 14px;
+        }
+
+        .legend-item {
+            display: grid;
+            grid-template-columns: 10px 1fr auto;
+            align-items: center;
+            gap: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--line-soft);
+        }
+
+        .legend-item:last-child {
+            border-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .legend-swatch {
+            width: 10px;
+            height: 10px;
+        }
+
+        .legend-name {
+            font-size: 12px;
+            letter-spacing: .02em;
+        }
+
+        .legend-val {
+            color: var(--muted);
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 15px;
+        }
+
+        /* ---------- Ring gauge ---------- */
+
+        .rings {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+        }
+
+        .ring-item {
+            display: grid;
+            justify-items: center;
+            gap: 14px;
+            text-align: center;
+        }
+
+        .ring-svg-wrap {
+            position: relative;
+            width: 116px;
+            height: 116px;
+        }
+
+        .ring-svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+            transform: rotate(-90deg);
+        }
+
+        .ring-value {
+            position: absolute;
+            inset: 0;
+            display: grid;
+            place-content: center;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 24px;
+            letter-spacing: -.03em;
+        }
+
+        .ring-value small {
+            font-size: .5em;
+            color: var(--taupe);
+        }
+
+        .ring-label {
+            color: var(--muted);
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: .18em;
+            text-transform: uppercase;
+        }
+
+        /* ---------- Horizontal bars ---------- */
+
+        .hbar-list {
+            display: grid;
+            gap: 18px;
+        }
+
+        .hbar {
+            display: grid;
+            grid-template-columns: 128px 1fr 46px;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .hbar-label {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: var(--muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .hbar-track {
+            position: relative;
+            height: 6px;
+            background: rgba(34, 40, 49, .08);
+            overflow: hidden;
+        }
+
+        .hbar-fill {
+            position: absolute;
+            inset: 0 auto 0 0;
+            width: 0;
+            background: var(--charcoal);
+        }
+
+        .hbar:nth-child(even) .hbar-fill {
+            background: var(--taupe);
+        }
+
+        .hbar-val {
+            text-align: right;
+            color: var(--charcoal);
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 14px;
+        }
+
+        /* =========================================================
+           FEED
+           ========================================================= */
+
+        .feed {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            display: grid;
+        }
+
+        .feed-item {
+            display: grid;
+            grid-template-columns: 18px 1fr;
+            gap: 14px;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--line-soft);
+        }
+
+        .feed-item:last-child {
+            border-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .feed-item:first-child {
+            padding-top: 0;
+        }
+
+        .feed-dot {
+            position: relative;
+            width: 7px;
+            height: 7px;
+            margin-top: 7px;
+            border-radius: 50%;
+            background: var(--taupe);
+        }
+
+        .feed-dot::after {
+            content: "";
+            position: absolute;
+            top: 11px;
+            left: 3px;
+            width: 1px;
+            height: calc(100% + 16px);
+            background: var(--line);
+        }
+
+        .feed-item:last-child .feed-dot::after {
+            display: none;
+        }
+
+        .feed-text {
+            margin: 0;
+            font-size: 13px;
+            line-height: 1.6;
+            color: rgba(34, 40, 49, .78);
+        }
+
+        .feed-text strong {
+            color: var(--charcoal);
+            font-weight: 700;
+        }
+
+        .feed-time {
+            display: block;
+            margin-top: 5px;
+            color: var(--muted-soft);
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: .16em;
+            text-transform: uppercase;
+        }
+
+        /* =========================================================
+           TABLE
+           ========================================================= */
+
+        .table-scroll {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: 0 -24px -24px;
+            padding: 0 24px 24px;
+        }
+
+        .data-table {
+            width: 100%;
+            min-width: 620px;
+            border-collapse: collapse;
+        }
+
+        .data-table th {
+            padding: 0 0 12px;
+            text-align: left;
+            color: var(--muted-soft);
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .data-table td {
+            padding: 15px 0;
+            border-bottom: 1px solid var(--line-soft);
+            font-size: 13px;
+            color: rgba(34, 40, 49, .8);
+            vertical-align: middle;
+        }
+
+        .data-table tr:last-child td {
+            border-bottom: 0;
+        }
+
+        .data-table tbody tr {
+            transition: background .3s ease;
+        }
+
+        .data-table tbody tr:hover {
+            background: rgba(34, 40, 49, .025);
+        }
+
+        .cell-ref {
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 14px;
+            color: var(--charcoal);
+            letter-spacing: -.01em;
+        }
+
+        .cell-strong {
+            color: var(--charcoal);
+            font-weight: 700;
+        }
+
+        .cell-num {
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 15px;
+            color: var(--charcoal);
+        }
+
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 10px;
+            border: 1px solid var(--line);
+            color: var(--muted);
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .tag.is-ok {
+            border-color: rgba(79, 122, 91, .35);
+            color: var(--ok);
+        }
+
+        .tag.is-warn {
+            border-color: rgba(168, 134, 63, .4);
+            color: var(--warn);
+        }
+
+        .tag.is-risk {
+            border-color: rgba(160, 74, 63, .38);
+            color: var(--risk);
+        }
+
+        .tag.is-solid {
+            background: var(--charcoal);
+            border-color: var(--charcoal);
+            color: var(--ivory);
+        }
+
+        /* =========================================================
+           RISK REGISTER
+           ========================================================= */
+
+        .risk-list {
+            display: grid;
+        }
+
+        .risk-row {
+            display: grid;
+            grid-template-columns: 1fr 120px 110px 40px;
+            align-items: center;
+            gap: 18px;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--line-soft);
+        }
+
+        .risk-row:last-child {
+            border-bottom: 0;
+        }
+
+        .risk-name {
+            font-size: 13px;
+            color: rgba(34, 40, 49, .82);
+        }
+
+        .risk-name strong {
+            display: block;
+            color: var(--charcoal);
+            font-weight: 700;
+            margin-bottom: 3px;
+        }
+
+        .risk-name span {
+            color: var(--muted-soft);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+        }
+
+        .risk-meter {
+            height: 5px;
+            background: rgba(34, 40, 49, .08);
+            position: relative;
+        }
+
+        .risk-meter span {
+            position: absolute;
+            inset: 0 auto 0 0;
+            width: 0;
+            background: var(--charcoal);
+        }
+
+        .risk-row.is-high .risk-meter span {
+            background: var(--risk);
+        }
+
+        .risk-row.is-med .risk-meter span {
+            background: var(--warn);
+        }
+
+        .risk-row.is-low .risk-meter span {
+            background: var(--ok);
+        }
+
+        /* =========================================================
+           PANEL ACTIONS
+           ========================================================= */
+
+        .panel-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 26px;
+            padding-top: 26px;
+            border-top: 1px solid var(--line);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 13px 22px;
+            border: 1px solid transparent;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: .18em;
+            text-transform: uppercase;
+            transition: background .35s var(--ease), color .35s var(--ease), border-color .35s var(--ease), transform .35s var(--ease);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-dark {
+            background: var(--charcoal);
+            color: var(--ivory);
+        }
+
+        .btn-dark:hover {
+            background: var(--slate);
+        }
+
+        .btn-outline {
+            border-color: var(--line);
+            color: var(--charcoal);
+        }
+
+        .btn-outline:hover {
+            background: var(--charcoal);
+            border-color: var(--charcoal);
+            color: var(--ivory);
+        }
+
+        .btn::after {
+            content: "→";
+            font-size: 13px;
+            letter-spacing: 0;
+            transition: transform .35s var(--ease);
+        }
+
+        .btn:hover::after {
+            transform: translateX(4px);
+        }
+
+        /* =========================================================
+           RESPONSIVE
+           ========================================================= */
+
+        @media (max-width: 1280px) {
+            .g-4 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .g-21,
+            .g-12 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 1080px) {
+            .g-3 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .panel-head {
+                grid-template-columns: 1fr;
+                gap: 18px;
+                align-items: start;
+            }
+
+            .panel-lede {
+                justify-self: start;
+            }
+
+            .donut-wrap {
+                grid-template-columns: 1fr;
+                justify-items: center;
+            }
+
+            .legend {
+                width: 100%;
+            }
+        }
+
+        /* ---------- MOBILE BREAKPOINT ---------- */
+        @media (max-width: 960px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.is-open {
+                transform: translateX(0);
+            }
+
+            .admin-main {
+                margin-left: 0;
+            }
+
+            .topbar {
+                left: 0;
+                padding: 0 18px;
+                gap: 14px;
+            }
+
+            /* Mobile order: logo → greeting → burger */
+            .topbar-logo {
+                display: block;
+            }
+
+            .topbar-greeting-wrap {
+                flex: 1;
+                min-width: 0;
+            }
+
+            .topbar-greeting {
+                font-size: 17px;
+            }
+
+            .topbar-right {
+                display: none;
+            }
+
+            .burger {
+                display: block;
+                flex-shrink: 0;
+            }
+        }
+
+        @media (max-width: 760px) {
+            .panel {
+                padding: 26px 18px 80px;
+            }
+
+            .g-2,
+            .g-3,
+            .g-4 {
+                grid-template-columns: 1fr;
+            }
+
+            .rings {
+                grid-template-columns: 1fr;
+            }
+
+            .hbar {
+                grid-template-columns: 90px 1fr 40px;
+                gap: 12px;
+            }
+
+            .risk-row {
+                grid-template-columns: 1fr auto;
+                gap: 10px 16px;
+            }
+
+            .risk-meter {
+                grid-column: 1 / -1;
+            }
+
+            .table-scroll {
+                margin: 0 -18px -18px;
+                padding: 0 18px 18px;
+            }
+
+            .bars {
+                height: 170px;
+                gap: 4px;
+            }
+
+            .bar-lbl {
+                font-size: 8px;
+                letter-spacing: .04em;
+            }
+
+            .chart-x span:nth-child(even) {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .topbar {
+                padding: 0 14px;
+                gap: 10px;
+            }
+
+            .topbar-greeting {
+                font-size: 20px;
+            }
+
+            .bars {
+                gap: 4px;
+            }
+
+            .bar-lbl {
+                font-size: 8px;
+                letter-spacing: .06em;
+            }
+
+            .panel-actions .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .kpi-value {
+                font-size: 34px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                animation-duration: .01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: .01ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =====================================================
+         SIDEBAR
+         ===================================================== -->
+    <aside class="sidebar" id="sidebar" aria-label="Admin console navigation">
+
+        <div class="sb-head">
+            <a class="sb-brand" href="admin.html" aria-label="STACKLY Legal — return to admin dashboard">
+                <img src="../logo.webp" alt="STACKLY Legal logo">
+            </a>
+            <span class="role-chip">Admin</span>
+        </div>
+
+        <nav class="sb-nav" id="sbNav" aria-label="Data sections">
+            <div class="sb-nav-label">Data Sections</div>
+
+            <button class="sb-item is-active" type="button" data-panel="overview" aria-current="page">
+                <span class="sb-label">Firm Command</span>
+                <span class="sb-dot" aria-hidden="true"></span>
+            </button>
+
+            <button class="sb-item" type="button" data-panel="matters">
+                <span class="sb-label">Matter Portfolio</span>
+                <span class="sb-dot" aria-hidden="true"></span>
+            </button>
+
+            <button class="sb-item" type="button" data-panel="counsel">
+                <span class="sb-label">Counsel &amp; Resourcing</span>
+                <span class="sb-dot" aria-hidden="true"></span>
+            </button>
+
+            <button class="sb-item" type="button" data-panel="financials">
+                <span class="sb-label">Financial Performance</span>
+                <span class="sb-dot" aria-hidden="true"></span>
+            </button>
+
+            <button class="sb-item" type="button" data-panel="governance">
+                <span class="sb-label">Risk &amp; Governance</span>
+                <span class="sb-dot" aria-hidden="true"></span>
+            </button>
+        </nav>
+
+        <div class="sb-foot">
+            <div class="sb-user">
+                <span class="sb-avatar" id="sbAvatar" aria-hidden="true">AD</span>
+                <span class="sb-user-meta">
+                    <strong id="sbUserName">Admin</strong>
+                    <em id="sbUserEmail">admin@aureliuslegal.example</em>
+                </span>
+            </div>
+            <a class="sb-logout" href="login.html">
+                <span>Logout</span>
+                <span aria-hidden="true">→</span>
+            </a>
+        </div>
+    </aside>
+
+    <div class="scrim" id="scrim" hidden></div>
+
+    <!-- =====================================================
+         MAIN
+         ===================================================== -->
+    <div class="admin-main">
+
+        <header class="topbar">
+            <a class="topbar-logo" href="admin.html" aria-label="STACKLY Legal home">
+                <img src="../logo.webp" alt="STACKLY Legal logo">
+            </a>
+
+            <div class="topbar-greeting-wrap">
+                <span class="topbar-greeting" id="topbarGreeting">Hello, admin</span>
+            </div>
+
+            <div class="topbar-right">
+                <span class="live-dot" aria-hidden="true"></span>
+                <span>Live</span>
+                <span class="topbar-date" id="topbarDate"></span>
+            </div>
+
+            <button class="burger" id="burger" type="button" aria-label="Open navigation" aria-expanded="false"
+                aria-controls="sidebar">
+                <span></span>
+                <span></span>
+            </button>
+        </header>
+
+        <main class="panels">
+
+            <!-- =================================================
+                 PANEL 01 — FIRM COMMAND
+                 ================================================= -->
+            <section class="panel is-active" id="panel-overview" data-panel="overview"
+                aria-labelledby="title-overview">
+
+                <div class="panel-head">
+                    <div>
+                        <span class="panel-eyebrow">Firm Command</span>
+                        <h2 class="panel-title" id="title-overview">Practice overview</h2>
+                    </div>
+                    <p class="panel-lede">
+                        The firm-wide operating position — matters in flight, counsel
+                        capacity and commercial performance, consolidated in one view.
+                    </p>
+                </div>
+
+                <!-- 1.1 KPI row -->
+                <div class="grid g-4" data-stagger>
+                    <article class="kpi">
+                        <span class="kpi-label">Active matters</span>
+                        <span class="kpi-value" data-count="148">0</span>
+                        <div class="kpi-foot">
+                            <span class="kpi-trend up">▲ 6.2%</span>
+                            <span class="kpi-note">vs last quarter</span>
+                        </div>
+                    </article>
+
+                    <article class="kpi">
+                        <span class="kpi-label">Counsel on record</span>
+                        <span class="kpi-value" data-count="42">0</span>
+                        <div class="kpi-foot">
+                            <span class="kpi-trend up">▲ 3</span>
+                            <span class="kpi-note">new this quarter</span>
+                        </div>
+                    </article>
+
+                    <article class="kpi">
+                        <span class="kpi-label">Billable hours · MTD</span>
+                        <span class="kpi-value" data-count="6840">0</span>
+                        <div class="kpi-foot">
+                            <span class="kpi-trend flat">◆ 0.4%</span>
+                            <span class="kpi-note">vs monthly target</span>
+                        </div>
+                    </article>
+
+                    <article class="kpi">
+                        <span class="kpi-label">Realization rate</span>
+                        <span class="kpi-value" data-count="94" data-suffix="%">0</span>
+                        <div class="kpi-foot">
+                            <span class="kpi-trend up">▲ 1.8 pts</span>
+                            <span class="kpi-note">rolling 12 months</span>
+                        </div>
+                    </article>
+                </div>
+
+                <!-- 1.2 Throughput + 1.3 Practice distribution -->
+                <div class="grid g-21">
+                    <article class="card" data-stagger>
+                        <header class="card-head">
+                            <h3>Matter throughput</h3>
+                            <span class="card-meta">Rolling 12 months</span>
+                        </header>
+                        <div class="chart" id="chart-throughput"></div>
+                    </article>
+
+                    <article class="card" data-stagger>
+                        <header class="card-head">
+                            <h3>Practice distribution</h3>
+                            <span class="card-meta">By active matters</span>
+                        </header>
+                        <div class="donut-wrap">
+                            <div class="donut-center" id="donut-practice"></div>
+                            <div class="legend" id="legend-practice"></div>
+                        </div>
+                    </article>
+                </div>
+
+                <!-- 1.4 Activity + 1.5 Utilization -->
+                <div class="grid g-2">
+                    <article class="card" data-stagger>
+                        <header class="card-head">
+                            <h3>Live activity</h3>
+                            <span class="card-meta">Last 60 minutes</span>
+                        </header>
+                        <ul class="feed">
+                            <li class="feed-item">
+                                <span class="feed-dot" aria-hidden="true"></span>
+                                <div>
+                                    <p class="feed-text">Matter <strong>AL-2291</strong> advanced to documentation
+                                        stage.</p>
+                                    <span class="feed-time">12 min ago · Corporate</span>
+                                </div>
+                            </li>
+                            <li class="feed-item">
+                                <span class="feed-dot" aria-hidden="true"></span>
+                                <div>
+                                    <p class="feed-text">Conflict clearance recorded for <strong>AL-2304</strong>.
+                                    </p>
+                                    <span class="feed-time">26 min ago · Compliance</span>
+                                </div>
+                            </li>
+                            <li class="feed-item">
+                                <span class="feed-dot" aria-hidden="true"></span>
+                                <div>
+                                    <p class="feed-text">New instruction received from <strong>Financial
+                                            Services</strong> desk.</p>
+                                    <span class="feed-time">41 min ago · Intake</span>
+                                </div>
+                            </li>
+                            <li class="feed-item">
+                                <span class="feed-dot" aria-hidden="true"></span>
+                                <div>
+                                    <p class="feed-text">Draft award circulated on <strong>AL-2188</strong>.
+                                    </p>
+                                    <span class="feed-time">52 min ago · Disputes</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </article>
+
+                    <article class="card" data-stagger>
+                        <header class="card-head">
+                            <h3>Utilization by practice</h3>
+                            <span class="card-meta">Current month</span>
+                        </header>
+                        <div class="hbar-list" id="hbar-utilization"></div>
+                    </article>
+                </div>
+
+                <div class="panel-actions">
+                    <a class="btn btn-dark" href="../404.html">Export Firm Report</a>
+                    <a class="btn btn-outline" href="../404.html">Open Matter Register</a>
+                </div>
+            </section>
+
+            <!-- =================================================
+                 PANEL 02 — MATTER PORTFOLIO
+                 ================================================= -->
+            <section class="panel" id="panel-matters" data-panel="matters" aria-labelledby="title-matters">
+
+                <div class="panel-head">
+                    <div>
+                        <span class="panel-eyebrow">Matter Portfolio</span>
+                        <h2 class="panel-title" id="title-matters">Matters in flight</h2>
+                    </div>
+                    <p class="panel-lede">
+                        Intake, progression and closure across every practice group —
+                        with cycle-time visibility at matter level.
+                    </p>
+                </div>
+
+                <!-- 2.1 KPI strip -->
+                <div class="grid g-4" data-stagger>
+                    <article class="kpi">
+                        <span class="kpi-label">Open matters</span>
+                        <span class="kpi-value" data-count="148">0</span>
+                        <div class="kpi-foot"><span class="kpi-trend up">▲ 9</span><span class="kpi-note">this
+                                month</span></div>
+                    </article>
+                    <article class="kpi">
+                        <span class="kpi-label">Closed · YTD</span>
+                        <span class="kpi-value" data-count="312">0</span>
+                        <div class="kpi-foot"><span class="kpi-trend up">▲ 4.6%</span><span class="kpi-note">vs
+                                prior year</span></div>
+                    </article>
+                    <article class="kpi">
+                        <span class="kpi-label">Avg. cycle time</span>
+                        <span class="kpi-value" data-count="87" data-suffix="d">0</span>
+                        <div class="kpi-foot"><span class="kpi-trend down">▼ 6d</span><span class="kpi-note">faster
+                                than LY</span></div>
+                    </article>
+                    <article class="kpi">
+                        <span class="kpi-label">At-risk matters</span>
+                        <span class="kpi-value" data-count="7">0</span>
+                        <div class="kpi-foot"><span class="kpi-trend flat">◆ held</span><span class="kpi-note">under
+                                review</span></div>
+                    </article>
+                </div>
+
+                <!-- 2.2 Intake vs closure + 2.3 Status -->
+                <div class="grid g-21">
+                    <article class="card" data-stagger>
+                        <header class="card-head">
+                            <h3>Intake vs closure</h3>
+                            <span class="card-meta">Monthly · 2026</span>
+                        </header>
+                        <div class="bars" id="bars-intake"></div>
+                    </article>
+
+                    <article class="card" data-stagger>
+                        <header class="card-head">
+                            <h3>Matter status</h3>
+                            <span class="card-meta">Current book</span>
+                        </header>
+                        <div class="donut-wrap">
+                            <div class="donut-center" id="donut-status"></div>
+                            <div class="legend" id="legend-status"></div>
+                        </div>
+                    </article>
+                </div>
+
+                <!-- 2.4 Register -->
+                <div class="grid">
+                    <article class="card" data-stagger>
+                        <header class="card-head">
+                            <h3>Matter register</h3>
+                            <span class="card-meta">Most recent 6</span>
+                        </header>
+                        <div class="table-scroll">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Reference</th>
+                                        <th scope="col">Client</th>
+                                        <th scope="col">Practice</th>
+                                        <th scope="col">Lead</th>
+                                        <th scope="col">Stage</th>
+                                        <th scope="col">Opened</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="cell-ref">AL-2291</td>
+                                        <td class="cell-strong">Meridian Holdings</td>
+                                        <td>Corporate</td>
+                                        <td>A. Mercer</td>
+                                        <td><span class="tag is-solid">Documentation</span></td>
+                                        <td>14 Aug 2026</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="cell-ref">AL-2304</td>
+                                        <td class="cell-strong">Northgate Capital</td>
+                                        <td>M&amp;A</td>
+                                        <td>M. Bell</td>
+                                        <td><span class="tag is-warn">Diligence</span></td>
+                                        <td>21 Aug 2026</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="cell-ref">AL-2188</td>
+                                        <td class="cell-strong">Halcyon Industries</td>
+                                        <td>Disputes</td>
+                                        <td>E. Hart</td>
+                                        <td><span class="tag is-warn">Arbitration</span></td>
+                                        <td>02 Jun 2026</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="cell-ref">AL-2276</td>
+                                        <td class="cell-strong">Vantage Life Sciences</td>
+                                        <td>Regulatory</td>
+                                        <td>D. Rowan</td>
+                                        <td><span class="tag is-ok">Advisory</span></td>
+                                        <td>28 Jul 2026</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="cell-ref">AL-2244</td>
+                                        <td class="cell-strong">Sterling Infrastructure</td>
+                                        <td>Real Estate</td>
+                                        <td>P. Anand</td>
+                                        <td><span class="tag">Negotiation</span></td>
+                                        <td>09 Jul 2026</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="cell-ref">AL-2210</td>
+                                        <td class="cell-strong">Corvus Technologies</td>
+                                        <td>IP</td>
+                                        <td>A. Mercer</td>
+                                        <td><span class="tag is-ok">Advisory</span></td>
+                                        <td>17 Jun 2026</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </article>
+                </div>
+
+                <!-- 2.5 Cycle time -->
+                <div class="grid">
+                    <article class="card" data-stagger>
+                        <header class="card-head">
+                            <h3>Average cycle time by quarter</h3>
+                            <span class="card-meta">Days to closure</span>
+                        </header>
+                        <div class="chart" id="chart-cycle"></div>
+                    </article>
+                </div>
+
+                <div class="panel-actions">
+                    <a class="btn btn-dark" href="../404.html">Open Full Register</a>
+                    <a class="btn btn-outline" href="../404.html">Flag a Matter</a>
+                </div>
+            </section>
+
+            <!-- =================================================
+                 PANEL 03 — COUNSEL & RESOURCING
+                 ================================================= -->
+            <section class="panel" id="panel-counsel" data-panel="counsel" aria-labelledby="title-counsel">
+
+                <div class="panel-head">
+                    <div>
+                        <span class="panel-eyebrow">Counsel &amp; Resourcing</span>
+                        <h2 class="panel-title" id="title-counsel">Counsel capacity</h2>
+                    </div>
+                    <p class="panel-lede">
+                        Headcount, seniority and utilization across the practice —
+                        used to allocate work before capacity becomes a constraint.
+                    </p>
+                </div>
+
+                <!-- 3.1 KPIs -->
+                <div class="grid g-4" data-stagger>
+                    <article class="kpi">
+                        <span class="kpi-label">Total counsel</span>
+                        <span class="kpi-value" data-count="42">0</span>
+                        <div class="kpi-foot"><span class="kpi-trend up">▲ 3</span><span class="kpi-note">this
+                                quarter</span></div>
+                    </article>
+                    <article class="kpi">
+                        <span class="kpi-label">Partners</span>
+                        <span class="kpi-value" data-count="9">0</span>
+                        <div class="kpi-foot"><span class="kpi-trend flat">◆ stable</span><span
+                                class="kpi-note">since 2024</span></div>
+                    </article>
+                    <article class="kpi">
+                        <span class="kpi-label">Avg. utilization</span>
+                        <span class="kpi-value" data-count="78" data-suffix="%">0</span>
+                        <div class="kpi-foot"><span class="kpi-trend up">▲ 2.1 pts</span><span class="kpi-note">vs last
+                                month</span></div>
+                    </article>
+                    <article class="kpi">
+                        <span class="kpi-label">Open positions</span>
+                        <span class="kpi-value" data-count="4">0</span>
+                        <div class="kpi-foot"><span class="kpi-trend down">▼ 2</span><span class="kpi-note">in
+                                pipeline</span></div>
+                    </article>
+                </div>
+
+                <!-- 3.2 Headcount growth + 3.3 Utilization rings -->
+                <div class="grid g-21">
+                    <article class="card" data-stagger>
+                        <header class="card-head">
+                            <h3>Headcount growth</h3>
+                            <span class="card-meta">By year · 2019 – 2026</span>
+                        </header>
+                        <div class="bars" id="bars-headcount"></div>
+                    </article>
+
+                    <article class="card" data-stagger>
+                        <header class="card-head">
+                            <h3>Utilization by group</h3>
+                            <span class="card-meta">Current month</span>
+                        </header>
+                        <div class="rings" id="rings-utilization"></div>
+                    </article>
+                </div>
+
+                <!-- 3.4 Roster -->
+                <div class="grid">
+                    <article class="card" data-stagger>
+                        <header class="card-head">
+                            <h3>Counsel roster</h3>
+                            <span class="card-meta">Senior bench</span>
+                        </header>
+                        <div class="table-scroll">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Counsel</th>
+                                        <th scope="col">Role</th>
+                                        <th scope="col">Practice</th>
+                                        <th scope="col">Matters</th>
+                                        <th scope="col">Utilization</th>
+                                        <th scope="col">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="cell-strong">Adrian Mercer</td>
+                                        <td>Managing Partner</td>
+                                        <td>Corporate</td>
+                                        <td class="cell-num">24</td>
+                                        <td class="cell-num">86%</td>
+                                        <td><span class="tag is-warn">Near capacity</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="cell-strong">Elena Hart</td>
+                                        <td>Partner</td>
+                                        <td>Disputes</td>
+                                        <td class="cell-num">19</td>
+                                        <td class="cell-num">81%</td>
+                                        <td><span class="tag is-ok">Balanced</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="cell-strong">Daniel Rowan</td>
+                                        <td>Partner</td>
+                                        <td>Regulatory</td>
+                                        <td class="cell-num">16</td>
+                                        <td class="cell-num">74%</td>
+                                        <td><span class="tag is-ok">Balanced</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="cell-strong">Priya Anand</td>
+                                        <td>Partner</td>
+                                        <td>Banking</td>
+                                        <td class="cell-num">21</td>
+                                        <td class="cell-num">88%</td>
+                                        <td><span class="tag is-warn">Near capacity</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="cell-strong">Marcus Bell</td>
+                                        <td>Partner</td>
+                                        <td>Transactions</td>
+                                        <td class="cell-num">18</td>
+                                        <td class="cell-num">77%</td>
+                                        <td><span class="tag is-ok">Balanced</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </article>
+                </div>
+
+                <!-- 3.5 Seniority mix -->
+                <div class="grid">
+                    <article class="card" data-stagger>
+                        <header class="card-head">
+                            <h3>Seniority mix</h3>
+                            <span class="card-meta">Share of total counsel</span>
+                        </header>
+                        <div class="hbar-list" id="hbar-seniority"></div>
+                    </article>
+                </div>
+
+                <div class="panel-actions">
+                    <a class="btn btn-dark" href="../404.html">Open Resourcing Plan</a>
+                    <a class="btn btn-outline" href="../404.html">Request Lateral Hire</a>
+                </div>
+            </section>
+
+            <!-- =================================================
+                 PANEL 04 — FINANCIAL PERFORMANCE
+                 ================================================= -->
+            <section class="panel" id="panel-financials" data-panel="financials" aria-labelledby="title-financials">
+
+                <div class="panel-head">
+                    <div>
+                        <span class="panel-eyebrow">Financial Performance</span>
+                        <h2 class="panel-title" id="title-financials">Commercial position</h2>
+                    </div>
+                    <p class="panel-lede">
+                        Revenue, work-in-progress and realization — read together so
+                        the commercial picture stays honest.
+                    </p>
+                </div>
+
+                <!-- 4.1 KPIs -->
+                <div class="grid g-4" data-stagger>
+                    <article class="kpi">
+                        <span class="kpi-label">Revenue · YTD</span>
+                        <span class="kpi-value" data-count="184" data-suffix="M">0</span>
+                        <div class="kpi-foot"><span class="kpi-trend up">▲ 11.4%</span><span class="kpi-note">vs
+                                prior year</span></div>
+                    </article>
+                    <article class="kpi">
+                        <span class="kpi-label">Work in progress</span>
+                        <span class="kpi-value" data-count="27" data-suffix="M">0</span>
+                        <div class="kpi-foot"><span class="kpi-trend flat">◆ 14.7%</span><span class="kpi-note">of
+                                revenue</span></div>
+                    </article>
+                    <article class="kpi">
+                        <span class="kpi-label">Outstanding AR</span>
+                        <span class="kpi-value" data-count="19" data-suffix="M">0</span>
+                        <div class="kpi-foot"><span class="kpi-trend down">▲ 3.2%</span><span class="kpi-note">aged
+                                &gt; 60 days</span></div>
+                    </article>
+                    <article class="kpi">
+                        <span class="kpi-label">Avg. rate realization</span>
+                        <span class="kpi-value" data-count="94" data-suffix="%">0</span>
+                        <div class="kpi-foot"><span class="kpi-trend up">▲ 1.8 pts</span><span class="kpi-note">rolling
+                                12 months</span></div>
+                    </article>
+                </div>
+
+                <!-- 4.2 Revenue + 4.3 Realization -->
+                <div class="grid g-21">
+                    <article class="card" data-stagger>
+                        <header class="card-head">
+                            <h3>Revenue trajectory</h3>
+                            <span class="card-meta">Monthly · indexed</span>
+                        </header>
+                        <div class="chart" id="chart-revenue"></div>
+                    </article>
+
+                    <article class="card" data-stagger>
+                        <header class="card-head">
+                            <h3>Realization by practice</h3>
+                            <span class="card-meta">Percentage</span>
+                        </header>
+                        <div class="hbar-list" id="hbar-realization"></div>
+                    </article>
+                </div>
+
+                <!-- 4.4 WIP + 4.5 AR aging -->
+                <div class="grid g-2">
+                    <article class="card" data-stagger>
+                        <header class="card-head">
+                            <h3>Work in progress by practice</h3>
+                            <span class="card-meta">Current</span>
+                        </header>
+                        <div class="bars" id="bars-wip"></div>
+                    </article>
+
+                    <article class="card" data-stagger>
+                        <header class="card-head">
+                            <h3>Receivables ageing</h3>
+                            <span class="card-meta">Outstanding balance</span>
+                        </header>
+                        <div class="table-scroll">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Bucket</th>
+                                        <th scope="col">Value</th>
+                                        <th scope="col">Share</th>
+                                        <th scope="col">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="cell-strong">0 – 30 days</td>
+                                        <td class="cell-num">9.4M</td>
+                                        <td>49%</td>
+                                        <td><span class="tag is-ok">Current</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="cell-strong">31 – 60 days</td>
+                                        <td class="cell-num">5.1M</td>
+                                        <td>27%</td>
+                                        <td><span class="tag is-ok">Current</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="cell-strong">61 – 90 days</td>
+                                        <td class="cell-num">2.9M</td>
+                                        <td>15%</td>
+                                        <td><span class="tag is-warn">Watch</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="cell-strong">90+ days</td>
+                                        <td class="cell-num">1.6M</td>
+                                        <td>9%</td>
+                                        <td><span class="tag is-risk">Escalated</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="panel-actions">
+                    <a class="btn btn-dark" href="../404.html">Download Financial Pack</a>
+                    <a class="btn btn-outline" href="../404.html">Review WIP Write-offs</a>
+                </div>
+            </section>
+
+            <!-- =================================================
+                 PANEL 05 — RISK & GOVERNANCE
+                 ================================================= -->
+            <section class="panel" id="panel-governance" data-panel="governance" aria-labelledby="title-governance">
+
+                <div class="panel-head">
+                    <div>
+                        <span class="panel-eyebrow">Risk &amp; Governance</span>
+                        <h2 class="panel-title" id="title-governance">Oversight register</h2>
+                    </div>
+                    <p class="panel-lede">
+                        Conflicts, regulatory exposure and internal controls — the
+                        disciplines that protect the firm's independence.
+                    </p>
+                </div>
+
+                <!-- 5.1 Compliance score + KPIs -->
+                <div class="grid g-21">
+                    <article class="card" data-stagger>
+                        <header class="card-head">
+                            <h3>Compliance posture</h3>
+                            <span class="card-meta">Internal assessment</span>
+                        </header>
+                        <div class="rings" id="rings-compliance"></div>
+                    </article>
+
+                    <article class="card" data-stagger>
+                        <header class="card-head">
+                            <h3>Oversight indicators</h3>
+                            <span class="card-meta">Current quarter</span>
+                        </header>
+                        <div class="hbar-list" id="hbar-oversight"></div>
+                    </article>
+                </div>
+
+                <!-- 5.2 Risk register -->
+                <div class="grid">
+                    <article class="card" data-stagger>
+                        <header class="card-head">
+                            <h3>Risk register</h3>
+                            <span class="card-meta">Open items</span>
+                        </header>
+                        <div class="risk-list" id="risk-list"></div>
+                    </article>
+                </div>
+
+                <!-- 5.3 Conflict checks + 5.4 Regulatory watchlist -->
+                <div class="grid g-2">
+                    <article class="card" data-stagger>
+                        <header class="card-head">
+                            <h3>Conflict checks</h3>
+                            <span class="card-meta">Rolling 12 months</span>
+                        </header>
+                        <div class="chart" id="chart-conflicts"></div>
+                    </article>
+
+                    <article class="card" data-stagger>
+                        <header class="card-head">
+                            <h3>Regulatory watchlist</h3>
+                            <span class="card-meta">By jurisdiction</span>
+                        </header>
+                        <div class="hbar-list" id="hbar-regulatory"></div>
+                    </article>
+                </div>
+
+                <!-- 5.5 Audit trail -->
+                <div class="grid">
+                    <article class="card" data-stagger>
+                        <header class="card-head">
+                            <h3>Audit trail</h3>
+                            <span class="card-meta">Recent entries</span>
+                        </header>
+                        <ul class="feed">
+                            <li class="feed-item">
+                                <span class="feed-dot" aria-hidden="true"></span>
+                                <div>
+                                    <p class="feed-text">Conflict clearance recorded for <strong>AL-2304</strong> by
+                                        D. Rowan.</p>
+                                    <span class="feed-time">Today · 09:14 · Compliance</span>
+                                </div>
+                            </li>
+                            <li class="feed-item">
+                                <span class="feed-dot" aria-hidden="true"></span>
+                                <div>
+                                    <p class="feed-text">Engagement letter countersigned for <strong>AL-2291</strong>.
+                                    </p>
+                                    <span class="feed-time">Yesterday · 16:48 · Corporate</span>
+                                </div>
+                            </li>
+                            <li class="feed-item">
+                                <span class="feed-dot" aria-hidden="true"></span>
+                                <div>
+                                    <p class="feed-text">Access permissions reviewed for the <strong>Disputes</strong>
+                                        group.</p>
+                                    <span class="feed-time">Yesterday · 11:02 · IT Governance</span>
+                                </div>
+                            </li>
+                            <li class="feed-item">
+                                <span class="feed-dot" aria-hidden="true"></span>
+                                <div>
+                                    <p class="feed-text">Quarterly regulatory return filed in <strong>Singapore</strong>.
+                                    </p>
+                                    <span class="feed-time">2 days ago · Regulatory</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </article>
+                </div>
+
+                <div class="panel-actions">
+                    <a class="btn btn-dark" href="../404.html">Export Audit Log</a>
+                    <a class="btn btn-outline" href="../404.html">Raise a Risk Item</a>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        /* =========================================================
+           ADMIN CONSOLE — SCRIPT
+           ========================================================= */
+
+        document.addEventListener("DOMContentLoaded", () => {
+
+            const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+            const NS = "http://www.w3.org/2000/svg";
+
+            gsap.registerPlugin(ScrollTrigger);
+
+            /* ---------------------------------------------------------
+               DYNAMIC USER INFO (from login.html)
+               --------------------------------------------------------- */
+            let userEmail = "";
+            try { userEmail = localStorage.getItem("userEmail") || ""; } catch (e) { userEmail = ""; }
+
+            const emailPrefix = userEmail && userEmail.includes("@")
+                ? userEmail.split("@")[0]
+                : "admin";
+            const displayName = emailPrefix.charAt(0).toUpperCase() + emailPrefix.slice(1);
+
+            const sbUserName = document.getElementById("sbUserName");
+            const sbUserEmail = document.getElementById("sbUserEmail");
+            const sbAvatar = document.getElementById("sbAvatar");
+            const topbarGreeting = document.getElementById("topbarGreeting");
+
+            if (sbUserName) sbUserName.textContent = displayName;
+            if (sbUserEmail) sbUserEmail.textContent = userEmail || "admin@aureliuslegal.example";
+            if (sbAvatar) sbAvatar.textContent = displayName.slice(0, 2).toUpperCase();
+            if (topbarGreeting) topbarGreeting.textContent = "Hello, " + emailPrefix;
+
+            /* ---------------------------------------------------------
+               SVG helper
+               --------------------------------------------------------- */
+            function svgEl(tag, attrs, parent) {
+                const node = document.createElementNS(NS, tag);
+                if (attrs) {
+                    for (const key in attrs) node.setAttribute(key, attrs[key]);
+                }
+                if (parent) parent.appendChild(node);
+                return node;
+            }
+
+            function niceCeil(value) {
+                if (value <= 0) return 1;
+                const pow = Math.pow(10, Math.floor(Math.log10(value)));
+                const n = value / pow;
+                const m = n <= 1 ? 1 : n <= 2 ? 2 : n <= 2.5 ? 2.5 : n <= 5 ? 5 : 10;
+                return m * pow;
+            }
+
+            /* ---------------------------------------------------------
+               TOPBAR DATE
+               --------------------------------------------------------- */
+            const dateEl = document.getElementById("topbarDate");
+            if (dateEl) {
+                dateEl.textContent = new Date().toLocaleDateString("en-GB", {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric"
+                });
+            }
+
+            /* ---------------------------------------------------------
+               SIDEBAR — mobile toggle
+               --------------------------------------------------------- */
+            const sidebar = document.getElementById("sidebar");
+            const burger = document.getElementById("burger");
+            const scrim = document.getElementById("scrim");
+
+            function setNav(open) {
+                sidebar.classList.toggle("is-open", open);
+                burger.setAttribute("aria-expanded", String(open));
+                burger.setAttribute("aria-label", open ? "Close navigation" : "Open navigation");
+                document.body.classList.toggle("nav-open", open);
+
+                if (open) {
+                    scrim.hidden = false;
+                    requestAnimationFrame(() => scrim.classList.add("is-visible"));
+                } else {
+                    scrim.classList.remove("is-visible");
+                    window.setTimeout(() => {
+                        if (!sidebar.classList.contains("is-open")) scrim.hidden = true;
+                    }, 400);
+                }
+            }
+
+            burger.addEventListener("click", () => {
+                setNav(!sidebar.classList.contains("is-open"));
+            });
+            scrim.addEventListener("click", () => setNav(false));
+            document.addEventListener("keydown", (e) => {
+                if (e.key === "Escape" && sidebar.classList.contains("is-open")) setNav(false);
+            });
+
+            /* ---------------------------------------------------------
+               PANEL SWITCHING
+               --------------------------------------------------------- */
+            const navItems = Array.from(document.querySelectorAll(".sb-item"));
+            const panels = Array.from(document.querySelectorAll(".panel"));
+            const built = new Set();
+
+            const PANEL_BUILDERS = {
+                overview: buildOverview,
+                matters: buildMatters,
+                counsel: buildCounsel,
+                financials: buildFinancials,
+                governance: buildGovernance
+            };
+
+            /* ----- SCROLL RESET ----------------------------------------
+               Whenever a new panel is activated, reset the scroll
+               position to the very top so the user always lands at
+               the beginning of the new section — never midway.
+            ------------------------------------------------------------ */
+            function scrollToTop() {
+                window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+
+                if (document.documentElement) document.documentElement.scrollTop = 0;
+                if (document.body) document.body.scrollTop = 0;
+
+                const main = document.querySelector(".admin-main");
+                if (main) main.scrollTop = 0;
+
+                const panelsWrap = document.querySelector(".panels");
+                if (panelsWrap) panelsWrap.scrollTop = 0;
+            }
+
+            function activatePanel(id, animate) {
+                const target = document.getElementById("panel-" + id);
+                if (!target) return;
+
+                panels.forEach((p) => {
+                    p.classList.toggle("is-active", p === target);
+                });
+
+                navItems.forEach((btn) => {
+                    const isTarget = btn.dataset.panel === id;
+                    btn.classList.toggle("is-active", isTarget);
+                    if (isTarget) {
+                        btn.setAttribute("aria-current", "page");
+                    } else {
+                        btn.removeAttribute("aria-current");
+                    }
+                });
+
+                if (!built.has(id)) {
+                    built.add(id);
+                    if (typeof PANEL_BUILDERS[id] === "function") {
+                        PANEL_BUILDERS[id]();
+                    }
+                }
+
+                scrollToTop();
+
+                if (animate !== false) {
+                    if (reduceMotion) {
+                        gsap.set(target, { clearProps: "all" });
+                    } else {
+                        gsap.fromTo(target,
+                            { opacity: 0, y: 18 },
+                            {
+                                opacity: 1,
+                                y: 0,
+                                duration: .55,
+                                ease: "power3.out",
+                                clearProps: "transform"
+                            }
+                        );
+                    }
+                }
+
+                if (window.ScrollTrigger) {
+                    ScrollTrigger.refresh();
+                    requestAnimationFrame(scrollToTop);
+                }
+            }
+
+            navItems.forEach((btn) => {
+                btn.addEventListener("click", () => {
+                    activatePanel(btn.dataset.panel, true);
+                    if (sidebar.classList.contains("is-open")) setNav(false);
+                });
+            });
+
+            /* ---------------------------------------------------------
+               ANIMATION UTILITIES
+               --------------------------------------------------------- */
+            function staggerIn(scope) {
+                if (reduceMotion || !scope) return;
+                const items = scope.querySelectorAll("[data-stagger], .kpi, .card");
+                gsap.fromTo(items,
+                    { opacity: 0, y: 24 },
+                    {
+                        opacity: 1,
+                        y: 0,
+                        duration: .7,
+                        ease: "power3.out",
+                        stagger: .06,
+                        clearProps: "transform"
+                    }
+                );
+            }
+
+            function animateCounters(scope) {
+                if (!scope) return;
+                scope.querySelectorAll("[data-count]").forEach((el) => {
+                    const target = Number(el.dataset.count);
+                    const suffix = el.dataset.suffix || "";
+
+                    if (reduceMotion) {
+                        el.textContent = target.toLocaleString() + suffix;
+                        return;
+                    }
+
+                    const proxy = { v: 0 };
+                    gsap.to(proxy, {
+                        v: target,
+                        duration: 1.6,
+                        ease: "power2.out",
+                        onUpdate() {
+                            el.textContent = Math.round(proxy.v).toLocaleString() + suffix;
+                        }
+                    });
+                });
+            }
+
+            /* ---------------------------------------------------------
+               CHART BUILDERS
+               --------------------------------------------------------- */
+
+            /* ---- Line / area chart ---- */
+            function lineChart(mountId, cfg) {
+                const mount = document.getElementById(mountId);
+                if (!mount) return;
+
+                const {
+                    values,
+                    labels,
+                    height = 250,
+                    accent = "#948979",
+                    areaFill = "rgba(148,137,121,.14)",
+                    formatter = (v) => v
+                } = cfg;
+
+                const W = 1000;
+                const H = height;
+                const max = niceCeil(Math.max(...values));
+
+                const yCol = document.createElement("div");
+                yCol.className = "chart-y";
+                yCol.style.height = H + "px";
+                const ticks = 4;
+                for (let i = ticks; i >= 0; i--) {
+                    const span = document.createElement("span");
+                    span.textContent = formatter(Math.round((max / ticks) * i));
+                    yCol.appendChild(span);
+                }
+
+                const body = document.createElement("div");
+                body.className = "chart-body";
+
+                const plot = document.createElement("div");
+                plot.className = "chart-plot";
+
+                const svg = svgEl("svg", {
+                    viewBox: `0 0 ${W} ${H}`,
+                    preserveAspectRatio: "none",
+                    class: "chart-svg"
+                });
+                svg.style.height = H + "px";
+
+                for (let i = 0; i <= ticks; i++) {
+                    const y = (H / ticks) * i;
+                    svgEl("line", {
+                        x1: 0,
+                        x2: W,
+                        y1: y,
+                        y2: y,
+                        class: "grid-line"
+                    }, svg);
+                }
+
+                const stepX = W / (values.length - 1);
+                const pts = values.map((v, i) => [
+                    i * stepX,
+                    H - (v / max) * H
+                ]);
+
+                const lineD = pts
+                    .map((p, i) => (i ? "L" : "M") + p[0].toFixed(2) + " " + p[1].toFixed(2))
+                    .join(" ");
+
+                const areaD = lineD + ` L ${W} ${H} L 0 ${H} Z`;
+
+                const clipId = "clip-" + mountId + "-" + Math.random().toString(36).slice(2, 7);
+                const defs = svgEl("defs", {}, svg);
+                const clipPath = svgEl("clipPath", { id: clipId }, defs);
+                const clipRect = svgEl("rect", {
+                    x: 0,
+                    y: 0,
+                    width: reduceMotion ? W : 0,
+                    height: H
+                }, clipPath);
+
+                const group = svgEl("g", { "clip-path": `url(#${clipId})` }, svg);
+                svgEl("path", { d: areaD, fill: areaFill, stroke: "none" }, group);
+                svgEl("path", {
+                    d: lineD,
+                    stroke: accent,
+                    class: "chart-line"
+                }, group);
+
+                plot.appendChild(svg);
+                body.appendChild(plot);
+
+                const xRow = document.createElement("div");
+                xRow.className = "chart-x";
+                labels.forEach((l) => {
+                    const s = document.createElement("span");
+                    s.textContent = l;
+                    xRow.appendChild(s);
+                });
+                body.appendChild(xRow);
+
+                mount.appendChild(yCol);
+                mount.appendChild(body);
+
+                if (!reduceMotion) {
+                    gsap.to(clipRect, {
+                        attr: { width: W },
+                        duration: 1.5,
+                        ease: "power3.inOut"
+                    });
+                } else {
+                    clipRect.setAttribute("width", W);
+                }
+            }
+
+            /* ---- Bar chart (DOM) ---- */
+            function barChart(mountId, cfg) {
+                const mount = document.getElementById(mountId);
+                if (!mount) return;
+
+                const { values, labels, accentIndex = -1 } = cfg;
+                const max = Math.max(...values);
+
+                mount.innerHTML = "";
+                mount.classList.add("bars");
+
+                values.forEach((v, i) => {
+                    const col = document.createElement("div");
+                    col.className = "bar-col" + (i === accentIndex ? " is-accent" : "");
+
+                    const track = document.createElement("div");
+                    track.className = "bar-track";
+
+                    const bar = document.createElement("span");
+                    bar.className = "bar";
+                    bar.style.height = ((v / max) * 100).toFixed(1) + "%";
+                    bar.title = `${labels[i]}: ${v}`;
+
+                    track.appendChild(bar);
+
+                    const lbl = document.createElement("span");
+                    lbl.className = "bar-lbl";
+                    lbl.textContent = labels[i];
+
+                    col.appendChild(track);
+                    col.appendChild(lbl);
+                    mount.appendChild(col);
+                });
+
+                if (!reduceMotion) {
+                    gsap.from(mount.querySelectorAll(".bar"), {
+                        scaleY: 0,
+                        transformOrigin: "bottom center",
+                        duration: .9,
+                        ease: "power3.out",
+                        stagger: .05
+                    });
+                }
+            }
+
+            /* ---- Donut chart ---- */
+            function donutChart(centerId, legendId, segments, centerLabel, centerValue) {
+                const centerMount = document.getElementById(centerId);
+                const legendMount = document.getElementById(legendId);
+                if (!centerMount) return;
+
+                const size = 200;
+                const r = 74;
+                const cx = size / 2;
+                const cy = size / 2;
+                const stroke = 16;
+                const C = 2 * Math.PI * r;
+                const total = segments.reduce((s, x) => s + x.value, 0);
+
+                centerMount.innerHTML = "";
+
+                const svg = svgEl("svg", {
+                    viewBox: `0 0 ${size} ${size}`,
+                    class: "donut-svg"
+                });
+
+                svgEl("circle", {
+                    cx,
+                    cy,
+                    r,
+                    fill: "none",
+                    stroke: "rgba(34,40,49,.07)",
+                    "stroke-width": stroke
+                }, svg);
+
+                const arcs = [];
+                let acc = 0;
+
+                segments.forEach((seg) => {
+                    const len = (seg.value / total) * C;
+                    const arc = svgEl("circle", {
+                        cx,
+                        cy,
+                        r,
+                        fill: "none",
+                        stroke: seg.color,
+                        "stroke-width": stroke,
+                        "stroke-dasharray": `0 ${C}`,
+                        "stroke-dashoffset": -acc,
+                        transform: `rotate(-90 ${cx} ${cy})`
+                    }, svg);
+                    arcs.push({ node: arc, len });
+                    acc += len;
+                });
+
+                centerMount.appendChild(svg);
+
+                const text = document.createElement("div");
+                text.className = "donut-center-text";
+                text.innerHTML = `<strong>${centerValue}</strong><span>${centerLabel}</span>`;
+                centerMount.appendChild(text);
+
+                if (legendMount) {
+                    legendMount.innerHTML = "";
+                    segments.forEach((seg) => {
+                        const row = document.createElement("div");
+                        row.className = "legend-item";
+                        row.innerHTML =
+                            `<span class="legend-swatch" style="background:${seg.color}"></span>` +
+                            `<span class="legend-name">${seg.label}</span>` +
+                            `<span class="legend-val">${seg.value}</span>`;
+                        legendMount.appendChild(row);
+                    });
+                }
+
+                arcs.forEach((a) => {
+                    if (reduceMotion) {
+                        a.node.setAttribute("stroke-dasharray", `${a.len} ${C}`);
+                        return;
+                    }
+                    const proxy = { v: 0 };
+                    gsap.to(proxy, {
+                        v: a.len,
+                        duration: 1.2,
+                        ease: "power3.out",
+                        onUpdate() {
+                            a.node.setAttribute("stroke-dasharray", `${proxy.v} ${C}`);
+                        }
+                    });
+                });
+            }
+
+            /* ---- Ring gauges ---- */
+            function ringGauges(mountId, items) {
+                const mount = document.getElementById(mountId);
+                if (!mount) return;
+
+                mount.innerHTML = "";
+
+                items.forEach((item) => {
+                    const wrap = document.createElement("div");
+                    wrap.className = "ring-item";
+
+                    const svgWrap = document.createElement("div");
+                    svgWrap.className = "ring-svg-wrap";
+
+                    const size = 116;
+                    const stroke = 9;
+                    const r = (size - stroke) / 2;
+                    const C = 2 * Math.PI * r;
+
+                    const svg = svgEl("svg", {
+                        viewBox: `0 0 ${size} ${size}`,
+                        class: "ring-svg"
+                    });
+
+                    svgEl("circle", {
+                        cx: size / 2,
+                        cy: size / 2,
+                        r,
+                        fill: "none",
+                        stroke: "rgba(34,40,49,.08)",
+                        "stroke-width": stroke
+                    }, svg);
+
+                    const arc = svgEl("circle", {
+                        cx: size / 2,
+                        cy: size / 2,
+                        r,
+                        fill: "none",
+                        stroke: item.color || "#222831",
+                        "stroke-width": stroke,
+                        "stroke-linecap": "butt",
+                        "stroke-dasharray": `0 ${C}`
+                    }, svg);
+
+                    svgWrap.appendChild(svg);
+
+                    const val = document.createElement("div");
+                    val.className = "ring-value";
+                    val.innerHTML = `${item.value}<small>%</small>`;
+                    svgWrap.appendChild(val);
+
+                    const label = document.createElement("div");
+                    label.className = "ring-label";
+                    label.textContent = item.label;
+
+                    wrap.appendChild(svgWrap);
+                    wrap.appendChild(label);
+                    mount.appendChild(wrap);
+
+                    const target = (item.value / 100) * C;
+                    if (reduceMotion) {
+                        arc.setAttribute("stroke-dasharray", `${target} ${C}`);
+                        return;
+                    }
+                    const proxy = { v: 0 };
+                    gsap.to(proxy, {
+                        v: target,
+                        duration: 1.4,
+                        ease: "power3.out",
+                        delay: .15,
+                        onUpdate() {
+                            arc.setAttribute("stroke-dasharray", `${proxy.v} ${C}`);
+                        }
+                    });
+                });
+            }
+
+            /* ---- Horizontal bars ---- */
+            function hbarList(mountId, items, suffix = "%") {
+                const mount = document.getElementById(mountId);
+                if (!mount) return;
+
+                mount.innerHTML = "";
+
+                items.forEach((item) => {
+                    const row = document.createElement("div");
+                    row.className = "hbar";
+                    row.innerHTML =
+                        `<span class="hbar-label">${item.label}</span>` +
+                        `<span class="hbar-track"><span class="hbar-fill"></span></span>` +
+                        `<span class="hbar-val">${item.value}${suffix}</span>`;
+                    mount.appendChild(row);
+                });
+
+                const fills = mount.querySelectorAll(".hbar-fill");
+
+                fills.forEach((fill, i) => {
+                    const value = items[i].value;
+                    if (reduceMotion) {
+                        fill.style.width = value + "%";
+                        return;
+                    }
+                    gsap.to(fill, {
+                        width: value + "%",
+                        duration: 1.1,
+                        ease: "power3.out",
+                        delay: i * .07
+                    });
+                });
+            }
+
+            /* ---------------------------------------------------------
+               PANEL BUILDERS
+               --------------------------------------------------------- */
+
+            /* ---------- 01 · Firm Command ---------- */
+            function buildOverview() {
+                const scope = document.getElementById("panel-overview");
+
+                lineChart("chart-throughput", {
+                    values: [78, 84, 92, 88, 101, 96, 110, 104, 118, 112, 126, 134],
+                    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                    height: 250,
+                    accent: "#948979",
+                    areaFill: "rgba(148,137,121,.16)"
+                });
+
+                donutChart(
+                    "donut-practice",
+                    "legend-practice",
+                    [
+                        { label: "Corporate & Commercial", value: 46, color: "#222831" },
+                        { label: "Disputes", value: 34, color: "#393E46" },
+                        { label: "Regulatory", value: 28, color: "#948979" },
+                        { label: "Transactions", value: 24, color: "#DFD0B8" },
+                        { label: "Other", value: 16, color: "rgba(34,40,49,.18)" }
+                    ],
+                    "Active matters",
+                    "148"
+                );
+
+                hbarList("hbar-utilization", [
+                    { label: "Corporate", value: 86 },
+                    { label: "Transactions", value: 81 },
+                    { label: "Disputes", value: 78 },
+                    { label: "Regulatory", value: 74 },
+                    { label: "Banking", value: 88 },
+                    { label: "Employment", value: 69 }
+                ]);
+
+                animateCounters(scope);
+                staggerIn(scope);
+            }
+
+            /* ---------- 02 · Matter Portfolio ---------- */
+            function buildMatters() {
+                const scope = document.getElementById("panel-matters");
+
+                barChart("bars-intake", {
+                    values: [18, 24, 21, 29, 26, 33, 28, 31, 36, 30, 34, 39],
+                    labels: ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"],
+                    accentIndex: 11
+                });
+
+                donutChart(
+                    "donut-status",
+                    "legend-status",
+                    [
+                        { label: "Advisory", value: 58, color: "#222831" },
+                        { label: "Documentation", value: 34, color: "#393E46" },
+                        { label: "Diligence", value: 26, color: "#948979" },
+                        { label: "Dispute", value: 19, color: "#DFD0B8" },
+                        { label: "On hold", value: 11, color: "rgba(34,40,49,.16)" }
+                    ],
+                    "Open matters",
+                    "148"
+                );
+
+                lineChart("chart-cycle", {
+                    values: [112, 106, 101, 98, 96, 92, 90, 87],
+                    labels: ["Q1 25", "Q2 25", "Q3 25", "Q4 25", "Q1 26", "Q2 26", "Q3 26", "Q4 26"],
+                    height: 230,
+                    accent: "#222831",
+                    areaFill: "rgba(34,40,49,.08)",
+                    formatter: (v) => v + "d"
+                });
+
+                animateCounters(scope);
+                staggerIn(scope);
+            }
+
+            /* ---------- 03 · Counsel & Resourcing ---------- */
+            function buildCounsel() {
+                const scope = document.getElementById("panel-counsel");
+
+                barChart("bars-headcount", {
+                    values: [12, 16, 19, 23, 27, 31, 36, 42],
+                    labels: ["2019", "2020", "2021", "2022", "2023", "2024", "2025", "2026"],
+                    accentIndex: 7
+                });
+
+                ringGauges("rings-utilization", [
+                    { label: "Corporate", value: 86, color: "#222831" },
+                    { label: "Disputes", value: 78, color: "#948979" },
+                    { label: "Regulatory", value: 74, color: "#393E46" }
+                ]);
+
+                hbarList("hbar-seniority", [
+                    { label: "Partners", value: 21 },
+                    { label: "Counsel", value: 26 },
+                    { label: "Senior associates", value: 33 },
+                    { label: "Associates", value: 20 }
+                ]);
+
+                animateCounters(scope);
+                staggerIn(scope);
+            }
+
+            /* ---------- 04 · Financial Performance ---------- */
+            function buildFinancials() {
+                const scope = document.getElementById("panel-financials");
+
+                lineChart("chart-revenue", {
+                    values: [96, 104, 99, 112, 121, 118, 129, 138, 132, 146, 154, 168],
+                    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                    height: 250,
+                    accent: "#222831",
+                    areaFill: "rgba(34,40,49,.09)",
+                    formatter: (v) => v + "M"
+                });
+
+                hbarList("hbar-realization", [
+                    { label: "Corporate", value: 96 },
+                    { label: "Transactions", value: 94 },
+                    { label: "Disputes", value: 92 },
+                    { label: "Regulatory", value: 95 },
+                    { label: "Banking", value: 89 },
+                    { label: "Employment", value: 91 }
+                ]);
+
+                barChart("bars-wip", {
+                    values: [7.2, 5.8, 4.6, 3.4, 3.1, 2.4],
+                    labels: ["Corp", "Trans", "Disp", "Reg", "Bank", "Emp"],
+                    accentIndex: 0
+                });
+
+                animateCounters(scope);
+                staggerIn(scope);
+            }
+
+            /* ---------- 05 · Risk & Governance ---------- */
+            function buildGovernance() {
+                const scope = document.getElementById("panel-governance");
+
+                ringGauges("rings-compliance", [
+                    { label: "Conflicts", value: 98, color: "#222831" },
+                    { label: "Controls", value: 92, color: "#948979" },
+                    { label: "Regulatory", value: 89, color: "#393E46" }
+                ]);
+
+                hbarList("hbar-oversight", [
+                    { label: "Conflict clearances", value: 96 },
+                    { label: "Policy attestations", value: 91 },
+                    { label: "Training completion", value: 84 },
+                    { label: "File reviews closed", value: 78 },
+                    { label: "Audit actions closed", value: 72 }
+                ]);
+
+                /* Risk register */
+                const riskMount = document.getElementById("risk-list");
+                const risks = [
+                    { title: "Cross-border data transfer exposure", meta: "Regulatory · India / EU", level: "high", value: 82, tag: "High", cls: "is-risk" },
+                    { title: "Conflicts screening latency", meta: "Compliance · Firm-wide", level: "med", value: 58, tag: "Medium", cls: "is-warn" },
+                    { title: "Client file retention review", meta: "Governance · Firm-wide", level: "low", value: 34, tag: "Low", cls: "is-ok" },
+                    { title: "Vendor due diligence refresh", meta: "Operations · Firm-wide", level: "med", value: 61, tag: "Medium", cls: "is-warn" },
+                    { title: "Anti-money laundering refresher", meta: "Compliance · All offices", level: "low", value: 28, tag: "Low", cls: "is-ok" }
+                ];
+
+                if (riskMount) {
+                    riskMount.innerHTML = "";
+                    risks.forEach((r) => {
+                        const row = document.createElement("div");
+                        row.className = "risk-row is-" + r.level;
+                        row.innerHTML =
+                            `<div class="risk-name"><strong>${r.title}</strong><span>${r.meta}</span></div>` +
+                            `<div class="risk-meter"><span></span></div>` +
+                            `<div><span class="tag ${r.cls}">${r.tag}</span></div>` +
+                            `<div class="cell-num" style="text-align:right">${r.value}</div>`;
+                        riskMount.appendChild(row);
+                    });
+
+                    const meters = riskMount.querySelectorAll(".risk-meter span");
+                    meters.forEach((m, i) => {
+                        const w = risks[i].value;
+                        if (reduceMotion) {
+                            m.style.width = w + "%";
+                            return;
+                        }
+                        gsap.to(m, {
+                            width: w + "%",
+                            duration: 1.1,
+                            ease: "power3.out",
+                            delay: i * .08
+                        });
+                    });
+                }
+
+                lineChart("chart-conflicts", {
+                    values: [42, 48, 51, 46, 55, 61, 58, 66, 72, 69, 78, 84],
+                    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                    height: 230,
+                    accent: "#948979",
+                    areaFill: "rgba(148,137,121,.16)"
+                });
+
+                hbarList("hbar-regulatory", [
+                    { label: "India", value: 38 },
+                    { label: "Singapore", value: 24 },
+                    { label: "United Kingdom", value: 18 },
+                    { label: "UAE", value: 14 },
+                    { label: "United States", value: 9 }
+                ]);
+
+                animateCounters(scope);
+                staggerIn(scope);
+            }
+
+            /* ---------------------------------------------------------
+               INITIALISE FIRST PANEL
+               --------------------------------------------------------- */
+            built.add("overview");
+            buildOverview();
+
+            scrollToTop();
+
+            if (!reduceMotion) {
+                gsap.from(".topbar", {
+                    y: -20,
+                    opacity: 0,
+                    duration: .6,
+                    ease: "power3.out"
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

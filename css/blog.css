@@ -1,0 +1,1182 @@
+/* =========================================================
+   BLOG / LEGAL INTELLIGENCE — Editorial publication
+   ========================================================= */
+
+/* ---------- 01. Masthead ---------- */
+
+.masthead {
+    padding-top: 84px;
+    background: var(--charcoal);
+    color: var(--white);
+}
+
+.masthead-inner {
+    padding: 80px 0 80px;
+}
+
+.masthead-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border-dark);
+    color: rgba(248, 247, 243, .5);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+}
+
+.masthead-meta span:last-child {
+    text-align: right;
+}
+
+.masthead-title-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 60px;
+    align-items: end;
+    padding: 55px 0 42px;
+    border-bottom: 1px solid var(--border-dark);
+}
+
+.masthead-title {
+    margin: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(56px, 8vw, 128px);
+    font-weight: 400;
+    line-height: .9;
+    letter-spacing: -.055em;
+}
+
+.masthead-title em {
+    color: var(--ivory);
+    font-style: italic;
+}
+
+.masthead-title-meta {
+    display: grid;
+    gap: 12px;
+    text-align: right;
+    color: rgba(248, 247, 243, .55);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+}
+
+.masthead-title-meta span:first-child {
+    color: var(--ivory);
+}
+
+.masthead-footer {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 60px;
+    padding-top: 40px;
+}
+
+.masthead-lede {
+    max-width: 640px;
+    margin: 0;
+    color: rgba(248, 247, 243, .72);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(20px, 1.6vw, 24px);
+    font-style: italic;
+    line-height: 1.5;
+}
+
+.masthead-standfirst {
+    max-width: 400px;
+    margin: 0;
+    justify-self: end;
+    color: rgba(248, 247, 243, .52);
+    font-size: 14px;
+    line-height: 1.85;
+}
+
+/* ---------- Shared section header ---------- */
+
+.section-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: end;
+    margin-bottom: 55px;
+    padding-bottom: 26px;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.section-header.on-dark {
+    border-bottom-color: var(--border-dark);
+}
+
+.section-header-title {
+    margin: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(32px, 4vw, 56px);
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -.04em;
+}
+
+.section-header-meta {
+    justify-self: end;
+    max-width: 400px;
+    margin: 0;
+    color: rgba(34, 40, 49, .6);
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+.section-header.on-dark .section-header-meta {
+    color: rgba(248, 247, 243, .58);
+}
+
+/* ---------- 02. Featured Analysis ---------- */
+
+.featured-analysis {
+    background: var(--white);
+}
+
+.featured-hero-image {
+    position: relative;
+    height: min(680px, 68vw);
+    max-height: 720px;
+    overflow: hidden;
+    background: var(--slate);
+}
+
+.featured-hero-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(.68) contrast(1.02);
+}
+
+.featured-body {
+    padding: 70px 0 110px;
+}
+
+.featured-meta {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex-wrap: wrap;
+    margin-bottom: 32px;
+    color: var(--taupe);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+}
+
+.featured-meta span:nth-child(2)::before {
+    content: "—";
+    margin-right: 18px;
+    color: var(--taupe);
+}
+
+.featured-layout {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 80px;
+    align-items: start;
+}
+
+.featured-title {
+    margin: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(40px, 5vw, 78px);
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -.045em;
+}
+
+.featured-title a {
+    transition: color .3s ease;
+}
+
+.featured-title a:hover {
+    color: var(--taupe);
+}
+
+.featured-content {
+    padding-top: 8px;
+}
+
+.featured-standfirst {
+    margin: 0 0 24px;
+    color: rgba(34, 40, 49, .85);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(19px, 1.5vw, 23px);
+    font-style: italic;
+    line-height: 1.55;
+}
+
+.featured-excerpt {
+    margin: 0 0 30px;
+    color: rgba(34, 40, 49, .68);
+    font-size: 15px;
+    line-height: 1.9;
+}
+
+.featured-byline {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding-top: 22px;
+    border-top: 1px solid var(--border-light);
+    color: var(--taupe);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+}
+
+/* ---------- 03. Latest Developments ---------- */
+
+.latest {
+    padding: 110px 0;
+    background: var(--ivory);
+}
+
+.latest-list {
+    display: grid;
+}
+
+.latest-item {
+    display: grid;
+    grid-template-columns: 140px 1fr 220px 40px;
+    gap: 30px;
+    align-items: center;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--border-light);
+    transition: padding .35s var(--ease), background .35s var(--ease);
+}
+
+.latest-item:hover {
+    padding-inline: 12px;
+    background: rgba(34, 40, 49, .035);
+}
+
+.latest-date {
+    color: var(--taupe);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+}
+
+.latest-headline {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(20px, 2vw, 28px);
+    font-weight: 400;
+    line-height: 1.18;
+    color: var(--charcoal);
+}
+
+.latest-category {
+    justify-self: end;
+    color: rgba(34, 40, 49, .55);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    text-align: right;
+}
+
+.latest-arrow {
+    justify-self: end;
+    color: var(--taupe);
+    font-size: 16px;
+    transition: transform .35s var(--ease);
+}
+
+.latest-item:hover .latest-arrow {
+    transform: translateX(6px);
+}
+
+/* ---------- 04. Corporate Law ---------- */
+
+.corporate {
+    padding: 110px 0;
+    background: var(--white);
+}
+
+.corporate-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 70px;
+    align-items: start;
+}
+
+.corporate-lead {
+    display: grid;
+    gap: 26px;
+}
+
+.corporate-lead-image {
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--slate);
+}
+
+.corporate-lead-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(.7);
+    transition: transform .9s var(--ease);
+}
+
+.corporate-lead:hover .corporate-lead-image img {
+    transform: scale(1.03);
+}
+
+.corporate-lead-meta {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: var(--taupe);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+}
+
+.corporate-lead-title {
+    margin: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(28px, 3.2vw, 46px);
+    font-weight: 400;
+    line-height: 1.05;
+    letter-spacing: -.035em;
+}
+
+.corporate-lead-title a:hover {
+    color: var(--taupe);
+}
+
+.corporate-lead-excerpt {
+    margin: 0;
+    color: rgba(34, 40, 49, .66);
+    font-size: 14px;
+    line-height: 1.85;
+    max-width: 620px;
+}
+
+.corporate-minor {
+    display: grid;
+    gap: 26px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border-light);
+}
+
+.corporate-minor-item {
+    display: grid;
+    gap: 12px;
+    padding: 20px 0 24px;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.corporate-minor-item:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+}
+
+.corporate-minor-title {
+    margin: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(19px, 1.9vw, 26px);
+    font-weight: 400;
+    line-height: 1.18;
+}
+
+.corporate-minor-title a:hover {
+    color: var(--taupe);
+}
+
+.corporate-minor-meta {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: var(--taupe);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+}
+
+/* ---------- 05. Disputes & Litigation ---------- */
+
+.disputes-editorial {
+    padding: 120px 0;
+    background: var(--charcoal);
+    color: var(--white);
+}
+
+.disputes-editorial .section-header-meta {
+    color: rgba(248, 247, 243, .58);
+}
+
+.disputes-editorial-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 80px;
+    align-items: start;
+}
+
+.disputes-editorial-quote {
+    padding-right: 40px;
+    border-right: 1px solid var(--border-dark);
+}
+
+.disputes-editorial-quote-mark {
+    display: block;
+    margin-bottom: 22px;
+    color: var(--taupe);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 90px;
+    line-height: .5;
+}
+
+.disputes-editorial-quote blockquote {
+    margin: 0;
+    color: var(--ivory);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(24px, 2.4vw, 34px);
+    font-style: italic;
+    line-height: 1.35;
+    letter-spacing: -.02em;
+}
+
+.disputes-editorial-quote cite {
+    display: block;
+    margin-top: 26px;
+    color: rgba(248, 247, 243, .55);
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 700;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+}
+
+.disputes-editorial-list {
+    display: grid;
+}
+
+.disputes-editorial-item {
+    display: grid;
+    grid-template-columns: 100px 1fr 32px;
+    gap: 26px;
+    align-items: start;
+    padding: 26px 0;
+    border-bottom: 1px solid var(--border-dark);
+    transition: padding .35s var(--ease);
+}
+
+.disputes-editorial-item:first-child {
+    padding-top: 4px;
+}
+
+.disputes-editorial-item:last-child {
+    border-bottom: 0;
+}
+
+.disputes-editorial-item:hover {
+    padding-inline: 12px;
+}
+
+.disputes-editorial-date {
+    padding-top: 6px;
+    color: var(--taupe);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+}
+
+.disputes-editorial-title {
+    margin: 0 0 8px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(20px, 2vw, 28px);
+    font-weight: 400;
+    line-height: 1.18;
+}
+
+.disputes-editorial-title a:hover {
+    color: var(--ivory);
+}
+
+.disputes-editorial-excerpt {
+    margin: 0;
+    color: rgba(248, 247, 243, .55);
+    font-size: 13px;
+    line-height: 1.75;
+}
+
+.disputes-editorial-arrow {
+    justify-self: end;
+    padding-top: 4px;
+    color: var(--taupe);
+    font-size: 16px;
+    transition: transform .35s var(--ease);
+}
+
+.disputes-editorial-item:hover .disputes-editorial-arrow {
+    transform: translateX(6px);
+}
+
+/* ---------- 06. Regulatory Watch ---------- */
+
+.regulatory {
+    padding: 110px 0;
+    background: var(--white);
+}
+
+.regulatory-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 60px;
+    border-top: 1px solid var(--border-light);
+}
+
+.regulatory-item {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: 26px;
+    padding: 30px 0;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.regulatory-item-index {
+    padding-top: 4px;
+    color: var(--taupe);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 24px;
+    line-height: 1;
+}
+
+.regulatory-item-body {
+    display: grid;
+    gap: 14px;
+}
+
+.regulatory-item-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.regulatory-jurisdiction {
+    padding: 5px 10px;
+    background: var(--ivory);
+    color: var(--charcoal);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+}
+
+.regulatory-date {
+    color: var(--taupe);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+}
+
+.regulatory-item-title {
+    margin: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(19px, 1.8vw, 24px);
+    font-weight: 400;
+    line-height: 1.2;
+}
+
+.regulatory-item-title a:hover {
+    color: var(--taupe);
+}
+
+.regulatory-item-note {
+    margin: 0;
+    color: rgba(34, 40, 49, .6);
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+/* ---------- 07. Industry Perspectives ---------- */
+
+.industries-editorial {
+    padding: 110px 0;
+    background: var(--ivory);
+}
+
+.industry-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid var(--border-light);
+}
+
+.industry-column {
+    padding: 32px 30px 34px 0;
+    border-right: 1px solid var(--border-light);
+    border-bottom: 1px solid var(--border-light);
+}
+
+.industry-column:nth-child(3n) {
+    border-right: 0;
+}
+
+.industry-column:nth-child(3n+1) {
+    padding-left: 0;
+}
+
+.industry-column:not(:nth-child(3n+1)) {
+    padding-left: 30px;
+}
+
+.industry-column:nth-last-child(-n+3) {
+    border-bottom: 0;
+}
+
+.industry-column-name {
+    margin: 0 0 24px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(22px, 2.2vw, 30px);
+    font-weight: 400;
+    line-height: 1.05;
+    letter-spacing: -.02em;
+}
+
+.industry-column-list {
+    display: grid;
+    gap: 18px;
+}
+
+.industry-column-item {
+    display: grid;
+    gap: 8px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.industry-column-item:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+}
+
+.industry-column-title {
+    margin: 0;
+    color: var(--charcoal);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.4;
+    transition: color .3s ease;
+}
+
+.industry-column-item:hover .industry-column-title {
+    color: var(--taupe);
+}
+
+.industry-column-meta {
+    color: var(--taupe);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+}
+
+/* ---------- 08. From Our Lawyers ---------- */
+
+.lawyers {
+    padding: 110px 0;
+    background: var(--white);
+}
+
+.lawyers-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 50px;
+}
+
+.lawyer-column {
+    display: grid;
+    gap: 26px;
+}
+
+.lawyer-column-head {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.lawyer-column-avatar {
+    flex-shrink: 0;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: var(--slate);
+}
+
+.lawyer-column-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(.3) saturate(.75);
+}
+
+.lawyer-column-name {
+    margin: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 1.1;
+}
+
+.lawyer-column-role {
+    margin-top: 5px;
+    color: var(--taupe);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+}
+
+.lawyer-column-list {
+    display: grid;
+    gap: 16px;
+    padding-top: 22px;
+    border-top: 1px solid var(--border-light);
+}
+
+.lawyer-column-item {
+    display: grid;
+    gap: 8px;
+}
+
+.lawyer-column-item-title {
+    margin: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 17px;
+    font-weight: 400;
+    line-height: 1.4;
+}
+
+.lawyer-column-item-title a:hover {
+    color: var(--taupe);
+}
+
+.lawyer-column-item-meta {
+    color: var(--taupe);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+}
+
+/* ---------- 09. Publications & Resources ---------- */
+
+.publications {
+    padding: 110px 0;
+    background: var(--slate);
+    color: var(--white);
+}
+
+.publications-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 60px;
+}
+
+.publication-item {
+    display: grid;
+    grid-template-columns: 110px 1fr 50px;
+    gap: 26px;
+    align-items: start;
+    padding: 26px 0;
+    border-bottom: 1px solid var(--border-dark);
+    transition: padding .35s var(--ease);
+}
+
+.publication-item:hover {
+    padding-inline: 12px;
+}
+
+.publication-type {
+    padding-top: 6px;
+    color: var(--taupe);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+}
+
+.publication-body {
+    display: grid;
+    gap: 8px;
+}
+
+.publication-title {
+    margin: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(19px, 1.8vw, 24px);
+    font-weight: 400;
+    line-height: 1.2;
+}
+
+.publication-title a:hover {
+    color: var(--ivory);
+}
+
+.publication-meta {
+    color: rgba(248, 247, 243, .55);
+    font-size: 11px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+}
+
+.publication-download {
+    justify-self: end;
+    padding-top: 4px;
+    color: var(--ivory);
+    font-size: 15px;
+    transition: transform .35s var(--ease);
+}
+
+.publication-item:hover .publication-download {
+    transform: translateY(-3px);
+}
+
+/* ---------- 10. Stay Informed ---------- */
+
+.newsletter {
+    padding: 130px 0;
+    background: var(--ivory);
+}
+
+.newsletter-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.newsletter .eyebrow {
+    justify-content: center;
+    color: var(--taupe);
+}
+
+.newsletter-title {
+    margin: 0 0 24px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(42px, 5.5vw, 84px);
+    font-weight: 400;
+    line-height: .98;
+    letter-spacing: -.05em;
+}
+
+.newsletter-title em {
+    color: var(--taupe);
+    font-style: italic;
+}
+
+.newsletter-copy {
+    max-width: 520px;
+    margin: 0 auto 40px;
+    color: rgba(34, 40, 49, .68);
+    font-size: 15px;
+    line-height: 1.85;
+}
+
+.newsletter-form {
+    display: flex;
+    align-items: stretch;
+    max-width: 560px;
+    margin: 0 auto;
+    border: 1px solid var(--border-light);
+    background: var(--white);
+}
+
+.newsletter-form input {
+    flex: 1;
+    min-height: 54px;
+    padding: 0 22px;
+    border: 0;
+    background: transparent;
+    color: var(--charcoal);
+    font-size: 14px;
+    outline: none;
+}
+
+.newsletter-form input::placeholder {
+    color: rgba(34, 40, 49, .42);
+}
+
+.newsletter-form input:focus {
+    outline: 2px solid var(--taupe);
+    outline-offset: -2px;
+}
+
+.newsletter-form button {
+    min-height: 54px;
+    padding: 0 26px;
+    background: var(--charcoal);
+    color: var(--ivory);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background .35s var(--ease);
+}
+
+.newsletter-form button:hover {
+    background: var(--slate);
+}
+
+.newsletter-note {
+    margin: 22px 0 0;
+    color: var(--taupe);
+    font-size: 11px;
+    letter-spacing: .05em;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 1100px) {
+    .latest-item {
+        grid-template-columns: 120px 1fr 40px;
+    }
+
+    .latest-category {
+        display: none;
+    }
+}
+
+@media (max-width: 1000px) {
+    .masthead-title-row {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .masthead-title-meta {
+        text-align: left;
+    }
+
+    .masthead-footer {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .masthead-standfirst {
+        justify-self: start;
+    }
+
+    .section-header {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        align-items: start;
+    }
+
+    .section-header-meta {
+        justify-self: start;
+    }
+
+    .featured-layout {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+
+    .featured-body {
+        padding: 55px 0 90px;
+    }
+
+    .corporate-grid {
+        grid-template-columns: 1fr;
+        gap: 50px;
+    }
+
+    .disputes-editorial-grid {
+        grid-template-columns: 1fr;
+        gap: 50px;
+    }
+
+    .disputes-editorial-quote {
+        padding: 0 0 40px 0;
+        border-right: 0;
+        border-bottom: 1px solid var(--border-dark);
+    }
+
+    .regulatory-list {
+        grid-template-columns: 1fr;
+    }
+
+    .industry-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .industry-column,
+    .industry-column:nth-child(3n),
+    .industry-column:nth-child(3n+1),
+    .industry-column:not(:nth-child(3n+1)) {
+        padding: 26px 24px 28px 0;
+        border-right: 1px solid var(--border-light);
+        border-bottom: 1px solid var(--border-light);
+    }
+
+    .industry-column:nth-child(2n) {
+        border-right: 0;
+        padding-right: 0;
+    }
+
+    .industry-column:nth-child(2n+1) {
+        padding-left: 0;
+    }
+
+    .industry-column:not(:nth-child(2n+1)) {
+        padding-left: 24px;
+    }
+
+    .industry-column:nth-last-child(-n+2) {
+        border-bottom: 0;
+    }
+
+    .lawyers-grid {
+        grid-template-columns: 1fr;
+        gap: 50px;
+    }
+
+    .publications-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 720px) {
+    .masthead {
+        padding-top: 74px;
+    }
+
+    .masthead-inner {
+        padding: 65px 0 60px;
+    }
+
+    .latest,
+    .corporate,
+    .disputes-editorial,
+    .regulatory,
+    .industries-editorial,
+    .lawyers,
+    .publications,
+    .newsletter {
+        padding: 80px 0;
+    }
+
+    .latest-item {
+        grid-template-columns: 1fr 30px;
+        gap: 12px;
+        padding: 22px 0;
+    }
+
+    .latest-date {
+        grid-column: 1;
+    }
+
+    .latest-headline {
+        grid-column: 1;
+    }
+
+    .latest-arrow {
+        grid-row: 1 / span 2;
+        align-self: center;
+    }
+
+    .disputes-editorial-item {
+        grid-template-columns: 1fr 30px;
+        gap: 10px;
+        padding: 22px 0;
+    }
+
+    .disputes-editorial-date {
+        grid-column: 1;
+        padding: 0;
+    }
+
+    .disputes-editorial-title {
+        grid-column: 1;
+    }
+
+    .disputes-editorial-excerpt {
+        grid-column: 1;
+    }
+
+    .disputes-editorial-arrow {
+        grid-row: 1 / span 3;
+        align-self: center;
+        padding: 0;
+    }
+
+    .publication-item {
+        grid-template-columns: 1fr 40px;
+        gap: 12px;
+    }
+
+    .publication-type {
+        grid-column: 1;
+        padding: 0;
+    }
+
+    .publication-body {
+        grid-column: 1;
+    }
+
+    .publication-download {
+        grid-row: 1 / span 2;
+        align-self: center;
+        padding: 0;
+    }
+
+    .newsletter-form {
+        flex-direction: column;
+    }
+
+    .newsletter-form input,
+    .newsletter-form button {
+        width: 100%;
+    }
+}
+
+@media (max-width: 520px) {
+    .industry-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .industry-column,
+    .industry-column:nth-child(2n),
+    .industry-column:nth-child(2n+1),
+    .industry-column:nth-child(3n),
+    .industry-column:nth-child(3n+1),
+    .industry-column:not(:nth-child(3n+1)) {
+        padding: 24px 0 26px;
+        border-right: 0;
+        border-bottom: 1px solid var(--border-light);
+    }
+
+    .industry-column:nth-last-child(-n+2) {
+        border-bottom: 1px solid var(--border-light);
+    }
+
+    .industry-column:last-child {
+        border-bottom: 0;
+    }
+
+    .regulatory-item {
+        grid-template-columns: 44px 1fr;
+        gap: 18px;
+    }
+}
